@@ -1,6 +1,14 @@
-document.addEventListener('DOMContentLoaded', (event) => {
-    let year = document.querySelector("#year");
-    let date = new Date();
-    year.value = date.getFullYear();
-    
-})
+import { Year } from "./year.js";
+
+var year = new Year();
+
+function changeYear(event) {
+  let newYear = event.target.value;
+  year.year = newYear;
+}
+
+document.addEventListener("DOMContentLoaded", (event) => {
+  let yearInputElt = document.querySelector("#year");
+  yearInputElt.value = year.year;
+  yearInputElt.addEventListener("change", changeYear);
+});
