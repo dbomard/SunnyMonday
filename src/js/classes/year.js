@@ -1,17 +1,21 @@
-class Year{
+class Year {
   #year;
   #weeks;
-  
-  constructor(){
+
+  constructor() {
     let date = new Date();
     this.year = date.getFullYear();
   }
 
-  get year(){
+  get year() {
     return this.#year;
   }
 
-  set year(newYear){
+  set year(newYear) {
     this.#year = newYear
+  }
+
+  get weeks() {
+    return $this.this.#weeks;
   }
 }
