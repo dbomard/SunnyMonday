@@ -10,7 +10,21 @@
 
 <body>
     <label for="year">Année </label>
-    <input type="number" id="year" min="2000" />
+    <input type="number" id="year" />
+    <table>
+        <caption>Détails des jours de travail par équipe</caption>
+        <thead>
+            <tr>
+                <th scope="col">Equipe</th>
+                <th scope="col">Jours travaillés/an</th>
+                <th scope="col">Weekends d'1 jour/an</th>
+                <th scope="col">Weekends de 2 jours/an</th>
+                <th scope="col">Weekends de 3 jours/an</th>
+            </tr>
+        </thead>
+        <tbody id="table-teams">
+        </tbody>
+    </table>
 </body>
 
 <script type="module" src="./src/js/classes/script.js"></script>
