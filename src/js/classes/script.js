@@ -26,10 +26,29 @@ function updateTeams() {
   });
 }
 
+function showOffDays() {
+  let tableName = document.querySelector("#dayOffName");
+  tableName.innerHTML = `<th scope="row">Jour férié :</th>`;
+  let tableDate = document.querySelector("#dayOffDate");
+  tableDate.innerHTML = `<th scope="row">Date :</th>`;
+  let days = year.offDays;
+  days = year.offDays;
+  for (const [date, day] of Object.entries(days)) {
+    let newDay = document.createElement('td');
+    newDay.innerText = `${day}`;
+    tableName.appendChild(newDay);
+    let newDate = document.createElement('td');
+    newDate.innerText = `${date}`;
+    tableDate.appendChild(newDate);
+  }
+}
+
 function changeYear(event) {
   let newYear = event.target.value;
   year.year = newYear;
+  // TODO: corriger les infos asynchrones
   updateTeams();
+  showOffDays();
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
@@ -38,5 +57,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
   yearInputElt.max = year.year + 4;
   yearInputElt.min = year.year - 20;
   updateTeams();
+  // updateOffDays();
+
   yearInputElt.addEventListener("change", changeYear);
 });

@@ -24,9 +24,9 @@ export class Year {
 
   }
 
-  #updateOffDays() {
+  async #updateOffDays() {
     //TODO : compléter Méthode getOffDays
-    downloadOffDays(this.year)
+    await downloadOffDays(this.year)
       .then((response) => this.#offDays = JSON.parse(response))
       .then(() => console.log(`Jours fériés mis à jour:\n${JSON.stringify(this.#offDays)}`));
   }
