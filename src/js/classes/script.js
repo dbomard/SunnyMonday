@@ -33,7 +33,7 @@ function changeYear(event) {
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
-  let yearInputElt = document.querySelector("#year");
+  let yearInputElt = document.querySelector("#yearInput");
   yearInputElt.value = year.year;
   yearInputElt.max = year.year + 4;
   yearInputElt.min = year.year - 20;

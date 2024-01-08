@@ -9,22 +9,47 @@
 </head>
 
 <body>
-    <label for="year">Année </label>
-    <input type="number" id="year" />
-    <table>
-        <caption>Détails des jours de travail par équipe</caption>
-        <thead>
-            <tr>
-                <th scope="col">Equipe</th>
-                <th scope="col">Jours travaillés/an</th>
-                <th scope="col">Weekends d'1 jour/an</th>
-                <th scope="col">Weekends de 2 jours/an</th>
-                <th scope="col">Weekends de 3 jours/an</th>
-            </tr>
-        </thead>
-        <tbody id="table-teams">
-        </tbody>
-    </table>
+    <header>
+        <h1>Les lundis au soleil</h1>
+    </header>
+    <main>
+        <section id="year">
+            <h2>Détails de l'année</h2>
+            <label for="year">Année </label>
+            <input type="number" id="yearInput" />
+            <table id="offDays">
+                <caption>Jours fériés</caption>
+                <thead>
+                    <tr id="dayOffName">
+                        <th scope="row">Jour férié :</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr id="dayOffDate">
+                        <th scope="row">Date :</th>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id="teams">
+            <h2>Rythmes de travail par équipes</h2>
+            <table>
+                <caption>Détails des jours de travail par équipe</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Equipe</th>
+                        <th scope="col">Jours travaillés/an</th>
+                        <th scope="col">Weekends d'1 jour/an</th>
+                        <th scope="col">Weekends de 2 jours/an</th>
+                        <th scope="col">Weekends de 3 jours/an</th>
+                    </tr>
+                </thead>
+                <tbody id="table-teams">
+                </tbody>
+            </table>
+        </section>
+    </main>
 </body>
 
 <script type="module" src="./src/js/classes/script.js"></script>
