@@ -15,10 +15,7 @@ export class Year {
 
   constructor() {
     let date = new Date();
-    this.#year = date.getFullYear();
-    this.#updateOffDays();
-    this.#updateWeekNumbers();
-    this.#updateWorkingWeeks();
+    this.year = date.getFullYear();
   }
 
   #updateWorkingWeeks() {
@@ -51,11 +48,12 @@ export class Year {
   set year(newYear) {
     console.log(`Année changée\n`);
     this.#year = newYear;
-    this.#updateWeekNumbers();
     this.#updateOffDays();
+    this.#updateWeekNumbers();
+    this.#updateWorkingWeeks();
   }
 
   get weeksNumber() {
-    return $this.this.#weeksNumber;
+    return this.#weeksNumber;
   }
 }
