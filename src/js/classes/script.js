@@ -33,14 +33,14 @@ function showOffDays() {
   tableDate.innerHTML = `<th scope="row">Date :</th>`;
   let days = year.offDays;
   days = year.offDays;
-  for (const [date, day] of Object.entries(days)) {
+  days.forEach((date, day) => {
     let newDay = document.createElement('td');
     newDay.innerText = `${day}`;
     tableName.appendChild(newDay);
     let newDate = document.createElement('td');
     newDate.innerText = `${date}`;
     tableDate.appendChild(newDate);
-  }
+  });
 }
 
 function changeYear(event) {
@@ -54,10 +54,8 @@ function changeYear(event) {
 document.addEventListener("DOMContentLoaded", (event) => {
   let yearInputElt = document.querySelector("#yearInput");
   yearInputElt.value = year.year;
-  yearInputElt.max = year.year + 4;
-  yearInputElt.min = year.year - 20;
   updateTeams();
-  // updateOffDays();
+  showOffDays();
 
   yearInputElt.addEventListener("change", changeYear);
 });
