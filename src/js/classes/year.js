@@ -14,24 +14,24 @@ function addDays(date, days) {
     date.getMonth(),
     date.getDate() + days
   );
-  return `${newDate.getFullYear()}-${newDate.getMonth()}-${newDate.getDate()}`;
+  return `${newDate.getFullYear()}-${newDate.getMonth() + 1}-${newDate.getDate()}`;
 }
 
 export class Year {
   #year;
   #weeksNumber;
-  #workingWeeks;
+  #weeks;
   #offDays;
 
   constructor() {
     this.#offDays = new Map();
+    this.#weeks = new Map();
     let date = new Date();
     this.year = date.getFullYear();
   }
 
   #updateWorkingWeeks() {
     //TODO : compléter méthode updateWorkingWeeks
-    this.#workingWeeks = new Array(this.weeksNumber);
   }
 
   #getEasterDate() {
