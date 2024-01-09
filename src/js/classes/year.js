@@ -14,6 +14,7 @@ export class Year {
   #offDays;
 
   constructor() {
+    this.#offDays = new Map();
     let date = new Date();
     this.year = date.getFullYear();
   }
@@ -24,11 +25,28 @@ export class Year {
 
   }
 
-  async #updateOffDays() {
+  #getEasterDate() {
+    //TODO: calculer la date de Pâques
+    let B = 19 * (this.#year % 19) + 24;
+    let M = B % 30;
+    let C = 2 * (this.#year % 4) + 4 * (this.#year % 7) + 6 * M + 5;
+    let N = C % 7;
+    let P = M + N;
+    let easter = `${this.#year}-03-${P + 22}`;
+    if (P > 9) {
+      easter = `${this.#year}-04-${P - 9}`;
+    }
+    return easter;
+  }
+
+  #updateOffDays() {
     //TODO : compléter Méthode getOffDays
-    await downloadOffDays(this.year)
-      .then((response) => this.#offDays = JSON.parse(response))
-      .then(() => console.log(`Jours fériés mis à jour:\n${JSON.stringify(this.#offDays)}`));
+    // await downloadOffDays(this.year)
+    //   .then((response) => this.#offDays = JSON.parse(response))
+    //   .then(() => console.log(`Jours fériés mis à jour:\n${JSON.stringify(this.#offDays)}`));
+    this.#offDays.set("1er janvier", `${this.#year}-01-01`);
+    let easter = this.#getEasterDate();
+    this.#offDays.set("Pâques", `${easter}`);
   }
 
   #updateWeekNumbers() {
