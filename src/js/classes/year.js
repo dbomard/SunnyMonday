@@ -14,7 +14,7 @@ function addDays(date, days) {
     date.getMonth(),
     date.getDate() + days
   );
-  return newDate;
+  return `${newDate.getFullYear()}-${newDate.getMonth()}-${newDate.getDate()}`;
 }
 
 export class Year {
