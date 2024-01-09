@@ -28,14 +28,22 @@ export class Year {
     this.#weeks = new Map();
     let date = new Date();
     this.year = date.getFullYear();
+    // this.#updateWorkingWeeks();
   }
 
   #updateWorkingWeeks() {
-    //TODO : compléter méthode updateWorkingWeeks
+    //D'abord toutes les semaines : travail du lundi au samedi
+    for (let i = 1; i <= this.weeksNumber; i++) {
+      this.#weeks.set(i, weekTypes.open);
+    }
+    // Ajout des jours fériés
+    this.#offDays.forEach();
   }
 
+  /**
+   * @returns Date de Pâques
+   */
   #getEasterDate() {
-    //TODO: calculer la date de Pâques
     let B = 19 * (this.#year % 19) + 24;
     let M = B % 30;
     let C = 2 * (this.#year % 4) + 4 * (this.#year % 7) + 6 * M + 5;
