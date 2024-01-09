@@ -49,14 +49,19 @@ export class Year {
   }
 
   #updateOffDays() {
-    //TODO : compléter Méthode getOffDays
-    // await downloadOffDays(this.year)
-    //   .then((response) => this.#offDays = JSON.parse(response))
-    //   .then(() => console.log(`Jours fériés mis à jour:\n${JSON.stringify(this.#offDays)}`));
     this.#offDays.set("1er janvier", `${this.#year}-01-01`);
     let easter = this.#getEasterDate();
     this.#offDays.set("Pâques", `${easter}`);
     this.#offDays.set("Lundi de Pâques", `${addDays(new Date(easter), 1)}`);
+    this.#offDays.set("Fête du travail", `${this.#year}-05-01`);
+    this.#offDays.set("Ascension", `${addDays(new Date(easter), 39)}`);
+    this.#offDays.set("Pentecôte", `${addDays(new Date(easter), 49)}`);
+    this.#offDays.set("Lundi de Pentecôte", `${addDays(new Date(easter), 50)}`);
+    this.#offDays.set("Fête Nationale", `${this.#year}-07-14`);
+    this.#offDays.set("Assomption", `${this.#year}-08-15`);
+    this.#offDays.set("Toussaint", `${this.#year}-11-01`);
+    this.#offDays.set("Armistice 1918", `${this.#year}-11-11`);
+    this.#offDays.set("Noël", `${this.#year}-12-25`);
   }
 
   #updateWeekNumbers() {
