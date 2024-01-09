@@ -3,8 +3,18 @@ import { weekTypes } from "./week.js";
 
 async function downloadOffDays(year) {
   const response = await fetch(
-    `https://calendrier.api.gouv.fr/jours-feries/metropole/${year}.json`);
+    `https://calendrier.api.gouv.fr/jours-feries/metropole/${year}.json`
+  );
   return response.text();
+}
+
+function addDays(date, days) {
+  let newDate = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + days
+  );
+  return newDate;
 }
 
 export class Year {
@@ -22,7 +32,6 @@ export class Year {
   #updateWorkingWeeks() {
     //TODO : compléter méthode updateWorkingWeeks
     this.#workingWeeks = new Array(this.weeksNumber);
-
   }
 
   #getEasterDate() {
@@ -47,6 +56,7 @@ export class Year {
     this.#offDays.set("1er janvier", `${this.#year}-01-01`);
     let easter = this.#getEasterDate();
     this.#offDays.set("Pâques", `${easter}`);
+    this.#offDays.set("Lundi de Pâques", `${addDays(new Date(easter), 1)}`);
   }
 
   #updateWeekNumbers() {
