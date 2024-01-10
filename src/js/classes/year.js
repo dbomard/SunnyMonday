@@ -19,7 +19,7 @@ function addDays(date, days) {
 
 export class Year {
   #year;
-  #weeksNumber;
+  #weeksCount;
   #weeks;
   #offDays;
 
@@ -31,13 +31,25 @@ export class Year {
     // this.#updateWorkingWeeks();
   }
 
+  #setOffDayToWeeks(dateString) {
+    let days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    console.log(`${dateString} ${this}`);
+    let date = new Date(dateString);
+    let week = this.get(date.getWeek());
+    let day = days[date.getDay()];
+    week[day] = false;
+  }
+
   #updateWorkingWeeks() {
     //D'abord toutes les semaines : travail du lundi au samedi
-    for (let i = 1; i <= this.weeksNumber; i++) {
-      this.#weeks.set(i, weekTypes.open);
+    for (let i = 1; i <= this.weeksCount; i++) {
+      this.#weeks.set(i, JSON.parse(JSON.stringify(weekTypes.open)));
     }
     // Ajout des jours fériés
-    this.#offDays.forEach();
+    this.#offDays.forEach(this.#setOffDayToWeeks, this.#weeks);
+
+    // Test
+    console.log(this.getWorkingDaysCount());
   }
 
   /**
@@ -72,10 +84,10 @@ export class Year {
     this.#offDays.set("Noël", `${this.#year}-12-25`);
   }
 
-  #updateWeekNumbers() {
+  #updateWeeksCount() {
     let date = new Date(this.#year, 11, 28);
-    this.#weeksNumber = date.getWeek();
-    console.log(`${this.#weeksNumber} semaines dans l'année ${this.#year}`);
+    this.#weeksCount = date.getWeek();
+    console.log(`${this.#weeksCount} semaines dans l'année ${this.#year}`);
   }
 
   get offDays() {
@@ -90,11 +102,19 @@ export class Year {
     console.log(`Année changée\n`);
     this.#year = newYear;
     this.#updateOffDays();
-    this.#updateWeekNumbers();
+    this.#updateWeeksCount();
     this.#updateWorkingWeeks();
   }
 
-  get weeksNumber() {
-    return this.#weeksNumber;
+  get weeksCount() {
+    return this.#weeksCount;
+  }
+
+  getWorkingDaysCount() {
+    let days = 0;
+    for (let i = 1; i <= this.weeksCount; i++) {
+      let week = this.#weeks.get(i);
+      // console.log(week.values());
+    }
   }
 }
