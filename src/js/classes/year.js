@@ -24,16 +24,20 @@ export class Year {
   #offDays;
 
   constructor() {
-    this.#offDays = new Map();
-    this.#weeks = new Map();
+    this.#initialize();
     let date = new Date();
     this.year = date.getFullYear();
     // this.#updateWorkingWeeks();
   }
 
+  #initialize() {
+    this.#offDays = new Map();
+    this.#weeks = new Map();
+  }
+
   #setOffDayToWeeks(dateString) {
     let days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-    console.log(`${dateString} ${this}`);
+    // console.log(`${dateString} ${this}`);
     let date = new Date(dateString);
     let week = this.get(date.getWeek());
     let day = days[date.getDay()];
@@ -41,6 +45,7 @@ export class Year {
   }
 
   #updateWorkingWeeks() {
+    this.#updateWeeksCount();
     //D'abord toutes les semaines : travail du lundi au samedi
     for (let i = 1; i <= this.weeksCount; i++) {
       this.#weeks.set(i, JSON.parse(JSON.stringify(weekTypes.open)));
@@ -49,7 +54,7 @@ export class Year {
     this.#offDays.forEach(this.#setOffDayToWeeks, this.#weeks);
 
     // Test
-    console.log(this.getWorkingDaysCount());
+    console.log("Jours d'ouverture de la Médiathèque : ", this.getWorkingDaysCount());
   }
 
   /**
@@ -99,10 +104,10 @@ export class Year {
   }
 
   set year(newYear) {
+    this.#initialize();
     console.log(`Année changée\n`);
     this.#year = newYear;
     this.#updateOffDays();
-    this.#updateWeeksCount();
     this.#updateWorkingWeeks();
   }
 
@@ -112,9 +117,14 @@ export class Year {
 
   getWorkingDaysCount() {
     let days = 0;
-    for (let i = 1; i <= this.weeksCount; i++) {
-      let week = this.#weeks.get(i);
-      // console.log(week.values());
+    let weeks = this.#weeks.values();
+    for (let week of weeks) {
+      for (let day in week) {
+        if (week[day] === true) {
+          days++
+        }
+      }
     }
+    return days;
   }
 }
