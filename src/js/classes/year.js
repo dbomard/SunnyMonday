@@ -39,7 +39,12 @@ export class Year {
     let days = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
     // console.log(`${dateString} ${this}`);
     let date = new Date(dateString);
-    let week = this.get(date.getWeek());
+    let weekNumber = date.getWeek()
+    if (weekNumber === 53 && this.size === 52) {
+      weekNumber = -1;
+      this.set(weekNumber, JSON.parse(JSON.stringify(weekTypes.open)));
+    }
+    let week = this.get(weekNumber);
     let day = days[date.getDay()];
     week[day] = false;
   }
