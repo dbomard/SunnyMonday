@@ -1,5 +1,6 @@
 import "./dateExtras.js";
 import { weekTypes } from "./week.js";
+import { getHolidays } from "./sockets.js";
 
 async function downloadOffDays(year) {
   const response = await fetch(
@@ -22,17 +23,56 @@ export class Year {
   #weeksCount;
   #weeks;
   #offDays;
+  #holidays;
 
   constructor() {
-    this.#initialize();
+    // this.#initialize();
     let date = new Date();
-    this.year = date.getFullYear();
+    this.setYear(date.getFullYear());
     // this.#updateWorkingWeeks();
   }
 
   #initialize() {
     this.#offDays = new Map();
     this.#weeks = new Map();
+    this.#holidays = new Map();
+  }
+
+  async #updateHolidays() {
+    await getHolidays()
+      .then((holidays) => {
+        for (let holiday of holidays) {
+          // console.log(holiday);
+          let description = holiday.description;
+          let start_date = holiday.start_date;
+          let end_date = holiday.end_date;
+          if (start_date.startsWith(this.year) && end_date.startsWith(this.year)) {
+            let day1 = new Date(start_date);
+            let day2 = new Date(end_date);
+            let week = day1.getWeek();
+            if (day1.getDay() >= 4) {
+              week++;
+            }
+            let duration = Math.floor(((day2.getTime() - day1.getTime()) / (1000 * 60 * 60 * 24)) / 7);
+            for (let i = week; i < week + duration; i++) {
+              this.#holidays.set(i, { "description": description })
+              console.log(`${this.#holidays.get(i).description} ajoutées`);
+            }
+          } else if (description === "Vacances de Noël" && end_date.startsWith(this.year)) {
+            console.log("Vacances de Noël");
+            let day = new Date(end_date);
+            let holidayWeek = day.getWeek() - 1;
+            if (holidayWeek === 53) {
+              holidayWeek = -1;
+            }
+            this.#holidays.set(holidayWeek, { "description": description })
+          } else if (description === "Vacances de Noël" && start_date.startsWith(this.year)) {
+            console.log("Vacances de Noël");
+            let day = new Date(start_date);
+            this.#holidays.set(day.getWeek() + 1, { "description": description })
+          }
+        }
+      });
   }
 
   #setOffDayToWeeks(dateString) {
@@ -49,17 +89,29 @@ export class Year {
     week[day] = false;
   }
 
-  #updateWorkingWeeks() {
+  async #updateWorkingWeeks() {
     this.#updateWeeksCount();
-    //D'abord toutes les semaines : travail du lundi au samedi
+    // Pour toutes les semaines : travail du lundi au samedi
     for (let i = 1; i <= this.weeksCount; i++) {
       this.#weeks.set(i, JSON.parse(JSON.stringify(weekTypes.open)));
     }
-    // Ajout des jours fériés
-    this.#offDays.forEach(this.#setOffDayToWeeks, this.#weeks);
+    // Ajout des semaines de vacances
+    await this.#updateHolidays()
+      .then(() => {
+        for (let holidayWeek of this.#holidays.keys()) {
+          // console.log(holidayWeek);
+          this.#weeks.set(holidayWeek, JSON.parse(JSON.stringify(weekTypes.holidays)));
 
-    // Test
-    console.log("Jours d'ouverture de la Médiathèque : ", this.getWorkingDaysCount());
+        }
+      })
+      .then(() => {
+        // Ajout des jours fériés
+        this.#offDays.forEach(this.#setOffDayToWeeks, this.#weeks);
+      })
+      .then(() => {
+        // Test
+        console.log("Jours d'ouverture de la Médiathèque : ", this.getWorkingDaysCount());
+      })
   }
 
   /**
@@ -108,12 +160,12 @@ export class Year {
     return this.#year;
   }
 
-  set year(newYear) {
+  async setYear(newYear) {
     this.#initialize();
     console.log(`Année changée\n`);
     this.#year = newYear;
     this.#updateOffDays();
-    this.#updateWorkingWeeks();
+    await this.#updateWorkingWeeks();
   }
 
   get weeksCount() {
