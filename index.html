@@ -18,20 +18,24 @@
         <main>
             <section id="year">
                 <h2 class="mb-3 text-secondary">Détails de l'année</h2>
-                <div class="mb-3">
-                    <label for="year">Année </label>
-                    <input type="number" id="yearInput" />
+                <div class="row">
+                    <div class="col-auto">
+                        <div class="input-group mb-3">
+                            <span for="yearInput" class="input-group-text">Année </span>
+                            <input type="number" class="form-control" id="yearInput" />
+                        </div>
+                    </div>
                 </div>
                 <table id="offDays" class="table table-bordered table-striped-columns">
                     <caption>Jours fériés</caption>
                     <thead>
                         <tr id="dayOffName">
-                            <th scope="row">Jour férié :</th>
+                            <th scope="row">Jour férié</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr id="dayOffDate">
-                            <th scope="row">Date :</th>
+                            <th scope="row">Date</th>
                         </tr>
                     </tbody>
                 </table>

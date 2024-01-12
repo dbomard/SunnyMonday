@@ -37,9 +37,9 @@ function updateTeams() {
 
 function showOffDays() {
   let tableName = document.querySelector("#dayOffName");
-  tableName.innerHTML = `<th scope="row">Jour férié :</th>`;
+  tableName.innerHTML = `<th scope="row">Jour férié</th>`;
   let tableDate = document.querySelector("#dayOffDate");
-  tableDate.innerHTML = `<th scope="row">Date :</th>`;
+  tableDate.innerHTML = `<th scope="row">Date</th>`;
   let days = year.offDays;
   days = year.offDays;
   days.forEach((date, day) => {
@@ -62,6 +62,9 @@ function changeYear(event) {
 document.addEventListener("DOMContentLoaded", (event) => {
   let yearInputElt = document.querySelector("#yearInput");
   yearInputElt.value = year.year;
+  yearInputElt.setAttribute("min", year.year - 6);
+  yearInputElt.setAttribute("max", year.year + 1);
+
   updateTeams();
   showOffDays();
 
