@@ -15,6 +15,7 @@ function updateTeams() {
   table.innerHTML = "";
   teams.forEach((team, index) => {
     let newRow = document.createElement('tr');
+    team.update(year);
     newRow.id = `team${index}`;
     newRow.innerHTML = `
       <td>${team.name}</td>

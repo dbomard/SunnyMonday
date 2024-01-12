@@ -16,6 +16,10 @@ export class Team {
 
   }
 
+  update(year) {
+    console.log(year);
+  }
+
   get name() {
     return this.#name;
   }
