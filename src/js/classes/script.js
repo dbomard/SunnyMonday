@@ -53,21 +53,19 @@ function showOffDays() {
   });
 }
 
-function changeYear(event) {
+async function changeYear(event) {
   let newYear = event.target.value;
-  year.year = newYear;
-  updateTeams();
-  showOffDays();
+  await year.setYear(newYear)
+    .then(() => showOffDays())
+    .then(() => updateTeams());
 }
 
 document.addEventListener("DOMContentLoaded", (event) => {
   let yearInputElt = document.querySelector("#yearInput");
   yearInputElt.value = year.year;
+  const evt = new Event("change");
   yearInputElt.setAttribute("min", year.year - 6);
   yearInputElt.setAttribute("max", year.year + 1);
-
-  updateTeams();
-  showOffDays();
-
   yearInputElt.addEventListener("change", changeYear);
+  yearInputElt.dispatchEvent(evt);
 });
