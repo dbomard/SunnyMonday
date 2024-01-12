@@ -4,7 +4,7 @@ export class Team {
   #oneDayWeekends;
   #twoDaysWeekends;
   #threeDaysWeekends;
-  #workingDays;
+  #workingDaysCount;
 
   constructor(name, color) {
     this.#name = name;
@@ -12,7 +12,7 @@ export class Team {
     this.#oneDayWeekends = 1;
     this.#twoDaysWeekends = 2;
     this.#threeDaysWeekends = 3;
-    this.#workingDays = 365;
+    this.#workingDaysCount = 365;
 
   }
 
@@ -24,9 +24,13 @@ export class Team {
     return this.#color;
   }
 
-  get workingDays() {
-    return this.#workingDays;
-    // TODO: finir la méthode getWorkingdays   
+  get workingDaysCount() {
+    return this.#workingDaysCount;
+    // TODO: finir la méthode getWorkingdaysCount   
+  }
+
+  set workingDaysCount(count) {
+    this.#workingDaysCount = count;
   }
 
   get oneDayWeekends() {
