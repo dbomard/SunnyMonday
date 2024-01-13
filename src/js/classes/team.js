@@ -1,6 +1,8 @@
 export class Team {
   #name;
   #color;
+
+  
   #oneDayWeekends;
   #twoDaysWeekends;
   #threeDaysWeekends;
@@ -13,11 +15,10 @@ export class Team {
     this.#twoDaysWeekends = 2;
     this.#threeDaysWeekends = 3;
     this.#workingDaysCount = 365;
-
   }
 
   update(year) {
-    console.log(year);
+    console.log(`Mise à jour de l'équipe ${this.#name}`);
   }
 
   get name() {
@@ -30,7 +31,7 @@ export class Team {
 
   get workingDaysCount() {
     return this.#workingDaysCount;
-    // TODO: finir la méthode getWorkingdaysCount   
+    // TODO: finir la méthode getWorkingdaysCount
   }
 
   set workingDaysCount(count) {
@@ -39,7 +40,7 @@ export class Team {
 
   get oneDayWeekends() {
     return this.#oneDayWeekends;
-    // TODO: finir la méthode get1DaysWeekend    
+    // TODO: finir la méthode get1DaysWeekend
   }
 
   get twoDaysWeekends() {

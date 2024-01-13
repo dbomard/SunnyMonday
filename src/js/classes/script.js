@@ -10,20 +10,12 @@ teams[3] = new Team("Bleue", "table-primary");
 // console.log(teams);
 
 function updateTeams() {
-  console.log(`Mise à jour des équipes pour ${year.year}`);
-
-  // MAJ Objets Teams
-  for (let team of teams) {
-    // console.log("mise à jour de la team ", team);
-    team.workingDaysCount = year.getWorkingDaysCount();
-  }
-
   // MAJ Affichage
   let table = document.querySelector("#table-teams");
   table.innerHTML = "";
   teams.forEach((team, index) => {
-    let newRow = document.createElement('tr');
     team.update(year);
+    let newRow = document.createElement("tr");
     newRow.id = `team${index}`;
     newRow.classList.add(team.color);
     newRow.innerHTML = `
@@ -44,10 +36,10 @@ function showOffDays() {
   let days = year.offDays;
   days = year.offDays;
   days.forEach((date, day) => {
-    let newDay = document.createElement('td');
+    let newDay = document.createElement("td");
     newDay.innerText = `${day}`;
     tableName.appendChild(newDay);
-    let newDate = document.createElement('td');
+    let newDate = document.createElement("td");
     newDate.innerText = `${date}`;
     tableDate.appendChild(newDate);
   });
@@ -55,7 +47,8 @@ function showOffDays() {
 
 async function changeYear(event) {
   let newYear = event.target.value;
-  await year.setYear(newYear)
+  await year
+    .setYear(newYear)
     .then(() => showOffDays())
     .then(() => updateTeams());
 }
