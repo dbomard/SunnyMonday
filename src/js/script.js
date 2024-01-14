@@ -9,7 +9,7 @@ teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, wee
 teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
 teams[2] = new Team("Jaune", "table-warning", currentYear, [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB]);
 teams[3] = new Team("Bleue", "table-primary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
-teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
+teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.open]);
 
 function updateTeamsSection() {
   // MAJ Affichage
