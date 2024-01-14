@@ -9,8 +9,7 @@ teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, wee
 teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
 teams[2] = new Team("Jaune", "table-warning", currentYear, [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB]);
 teams[3] = new Team("Bleue", "table-primary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
-teams[3] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
-// console.log(teams);
+teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
 
 function updateTeamsSection() {
   // MAJ Affichage
@@ -38,12 +37,18 @@ function updateYearSection() {
   tableDate.innerHTML = `<th scope="row">Date</th>`;
   let days = currentYear.offDays;
   days = currentYear.publicHolidays;
+  let options = {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  }
   days.forEach((date, day) => {
     let newDay = document.createElement("td");
     newDay.innerText = `${day}`;
     tableName.appendChild(newDay);
     let newDate = document.createElement("td");
-    newDate.innerText = `${date}`;
+    newDate.innerText = `${date.toLocaleDateString('fr-FR', options)}`;
     tableDate.appendChild(newDate);
   });
 }
