@@ -2,22 +2,20 @@ export class Team {
   #name;
   #color;
 
-  
+  #pattern;
   #oneDayWeekends;
   #twoDaysWeekends;
   #threeDaysWeekends;
   #workingDaysCount;
+  #year;
 
-  constructor(name, color) {
+  constructor(name, color, currentYear, weeksPattern) {
     this.#name = name;
     this.#color = color;
-    this.#oneDayWeekends = 1;
-    this.#twoDaysWeekends = 2;
-    this.#threeDaysWeekends = 3;
-    this.#workingDaysCount = 365;
+    this.#year = currentYear;
   }
 
-  update(year) {
+  update() {
     console.log(`Mise à jour de l'équipe ${this.#name}`);
   }
 
@@ -30,25 +28,22 @@ export class Team {
   }
 
   get workingDaysCount() {
-    return this.#workingDaysCount;
+    return 365;
     // TODO: finir la méthode getWorkingdaysCount
   }
 
-  set workingDaysCount(count) {
-    this.#workingDaysCount = count;
-  }
-
   get oneDayWeekends() {
-    return this.#oneDayWeekends;
+    return 1;
     // TODO: finir la méthode get1DaysWeekend
   }
 
   get twoDaysWeekends() {
-    return this.#twoDaysWeekends;
+    return 2;
     // TODO: finir la méthode get2DaysWeekend
   }
+
   get threeDaysWeekends() {
-    return this.#threeDaysWeekends;
+    return 3;
     // TODO: finir la méthode get3DaysWeekend
   }
 }

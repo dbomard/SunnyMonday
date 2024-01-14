@@ -1,5 +1,6 @@
+export { getHolidays, getPublicHolidays }
 
-export async function getHolidays(year = 2024) {
+async function getHolidays(year = 2024) {
     const baseUrl = new URL("https://data.education.gouv.fr/api/explore/v2.1/catalog/datasets/fr-en-calendrier-scolaire/records");
     const params = new URLSearchParams({
         limit: '20',
@@ -9,7 +10,14 @@ export async function getHolidays(year = 2024) {
         refine: `annee_scolaire: "${year}-${year + 1}"`,
         refine: `annee_scolaire: "${year - 1}-${year}"`
     })
-    const fetchHolidays = await fetch(`${baseUrl}?${params}`);
-    const json = await fetchHolidays.json();
-    return json.results;
+    const result = await fetch(`${baseUrl}?${params}`);
+    const holidays = await result.json();
+    return holidays.results;
+}
+
+async function getPublicHolidays(year = 2024) {
+    const response = await fetch(
+        `https://calendrier.api.gouv.fr/jours-feries/metropole/${year}.json`
+    );
+    return response.text();
 }

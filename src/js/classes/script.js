@@ -1,20 +1,23 @@
 import { Year } from "./year.js";
 import { Team } from "./team.js";
+import { weekTypes } from "./week.js";
 
-var year = new Year();
+
+var currentYear = new Year();
 var teams = new Array(4);
-teams[0] = new Team("Verte", "table-success");
-teams[1] = new Team("Rouge", "table-danger");
-teams[2] = new Team("Jaune", "table-warning");
-teams[3] = new Team("Bleue", "table-primary");
+teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD]);
+teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
+teams[2] = new Team("Jaune", "table-warning", currentYear, [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB]);
+teams[3] = new Team("Bleue", "table-primary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
+teams[3] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
 // console.log(teams);
 
-function updateTeams() {
+function updateTeamsSection() {
   // MAJ Affichage
   let table = document.querySelector("#table-teams");
   table.innerHTML = "";
   teams.forEach((team, index) => {
-    team.update(year);
+    team.update(currentYear);
     let newRow = document.createElement("tr");
     newRow.id = `team${index}`;
     newRow.classList.add(team.color);
@@ -28,13 +31,13 @@ function updateTeams() {
   });
 }
 
-function showOffDays() {
+function updateYearSection() {
   let tableName = document.querySelector("#dayOffName");
   tableName.innerHTML = `<th scope="row">Jour férié</th>`;
   let tableDate = document.querySelector("#dayOffDate");
   tableDate.innerHTML = `<th scope="row">Date</th>`;
-  let days = year.offDays;
-  days = year.offDays;
+  let days = currentYear.offDays;
+  days = currentYear.publicHolidays;
   days.forEach((date, day) => {
     let newDay = document.createElement("td");
     newDay.innerText = `${day}`;
@@ -47,18 +50,17 @@ function showOffDays() {
 
 async function changeYear(event) {
   let newYear = event.target.value;
-  await year
-    .setYear(newYear)
-    .then(() => showOffDays())
-    .then(() => updateTeams());
+  await currentYear.setYear(newYear)
+    .then(() => updateYearSection())
+    .then(() => updateTeamsSection());
 }
 
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   let yearInputElt = document.querySelector("#yearInput");
-  yearInputElt.value = year.year;
+  yearInputElt.value = currentYear.year;
   const evt = new Event("change");
-  yearInputElt.setAttribute("min", year.year - 6);
-  yearInputElt.setAttribute("max", year.year + 1);
+  yearInputElt.setAttribute("min", currentYear.year - 6);
+  yearInputElt.setAttribute("max", currentYear.year + 1);
   yearInputElt.addEventListener("change", changeYear);
   yearInputElt.dispatchEvent(evt);
 });
