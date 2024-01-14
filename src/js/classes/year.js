@@ -1,5 +1,5 @@
-import "./dateUtils.js";
-import { getHolidays } from "./sockets.js";
+import "../dateUtils.js";
+import { getHolidays } from "../sockets.js";
 
 export class Year {
   #year;
@@ -9,8 +9,8 @@ export class Year {
 
   constructor() {
     // this.#initialize();
-    let date = new Date();
-    this.setYear(date.getFullYear());
+    // let date = new Date();
+    // this.setYear(date.getFullYear());
     // this.#updateWorkingWeeks();
   }
 

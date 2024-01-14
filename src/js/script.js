@@ -1,10 +1,10 @@
-import { Year } from "./year.js";
-import { Team } from "./team.js";
+import { Year } from "./classes/year.js";
+import { Team } from "./classes/team.js";
 import { weekTypes } from "./week.js";
 
 
-var currentYear = new Year();
-var teams = new Array(4);
+const currentYear = new Year();
+const teams = new Array(4);
 teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD]);
 teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
 teams[2] = new Team("Jaune", "table-warning", currentYear, [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB]);
@@ -62,7 +62,8 @@ async function changeYear(event) {
 
 document.addEventListener("DOMContentLoaded", () => {
   let yearInputElt = document.querySelector("#yearInput");
-  yearInputElt.value = currentYear.year;
+  let date = new Date();
+  yearInputElt.value = date.getFullYear();
   const evt = new Event("change");
   yearInputElt.setAttribute("min", currentYear.year - 6);
   yearInputElt.setAttribute("max", currentYear.year + 1);
