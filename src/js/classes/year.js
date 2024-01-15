@@ -23,14 +23,15 @@ export class Year {
    * MAJ les vacances scolaires
    */
   async #updateHolidays() {
-    await getHolidays()
+    await getHolidays(this.#year)
       .then((holidays) => {
+        // console.log(holidays);
         for (let holiday of holidays) {
-          // console.log(holiday);
           let description = holiday.description;
           let start_date = holiday.start_date;
           let end_date = holiday.end_date;
-          if (start_date.startsWith(this.year) && end_date.startsWith(this.year)) {
+          if (start_date.startsWith(this.year) && end_date.startsWith(this.year) && !description.startsWith('Pont')) {
+            console.log(holiday);
             let day1 = new Date(start_date);
             let day2 = new Date(end_date);
             let week = day1.getWeek();
@@ -43,13 +44,15 @@ export class Year {
               console.log(`${this.#holidays.get(i).description} ajoutées`);
             }
           } else if (description === "Vacances de Noël") {
-            console.log("Vacances de Noël");
+            console.log(holiday);
+            let day;
+            let delta;
             if (end_date.startsWith(this.year)) {
-              let day = new Date(end_date);
-              let delta = -1;
+              day = new Date(end_date);
+              delta = -1;
             } else if (start_date.startsWith(this.year)) {
-              let day = new Date(start_date);
-              let delta = 1;
+              day = new Date(start_date);
+              delta = 1;
             }
             let holidayWeek = day.getWeek() + delta;
             if (holidayWeek === 53 && delta === -1) {
@@ -113,13 +116,17 @@ export class Year {
     return this.#year;
   }
 
+  get holidays() {
+    return this.#holidays;
+  }
+
   async setYear(newYear) {
     this.#initialize();
     this.#year = newYear;
     this.#updateWeeksCount();
     this.#updatePublicHolidays();
-    await this.#updateHolidays();
-    console.log(`Année changée\n`);
+    await this.#updateHolidays()
+      .then(() => console.log(`Année changée\n`));
   }
 
   get weeksCount() {
