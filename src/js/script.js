@@ -67,8 +67,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let date = new Date();
   yearInputElt.value = date.getFullYear();
   const evt = new Event("change");
-  yearInputElt.setAttribute("min", currentYear.year - 6);
-  yearInputElt.setAttribute("max", currentYear.year + 1);
+  yearInputElt.setAttribute("min", yearInputElt.value - 6);
+  yearInputElt.setAttribute("max", yearInputElt.value + 1);
   yearInputElt.addEventListener("change", changeYear);
   teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD]);
   teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
