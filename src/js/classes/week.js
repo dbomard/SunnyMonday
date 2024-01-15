@@ -1,22 +1,42 @@
-import "../dateUtils"
-import { Day } from "./day"
+import "../dateUtils.js"
+import { Day } from "./day.js"
 
 export class Week {
 
     #days;
     #holidayWeek;
 
-    constructor(starting_date, holidayWeek = false) {
+    constructor(dates, holidayWeek = false) {
         this.#holidayWeek = holidayWeek;
         this.#days = new Map();
-        this.updateWeek(starting_date);
+        this.updateWeek(dates);
     }
 
-    updateWeek(starting_date) {
-        for (let i = 0; i < 7; i++) {
-            const day = new Day(starting_date.add(i));
-            if (day.date.getDay() === 0)
-                this.#days.set(i + 1, new Day(starting_date.add(i)));
+    updateWeek(dates) {
+        for (let date of dates) {
+            let day = new Day(date);
+            let index = "sunday";
+            switch (date.getDay()) {
+                case 1:
+                    index = "monday";
+                    break;
+                case 2:
+                    index = "tuesday";
+                    break;
+                case 3:
+                    index = "wednesday";
+                    break;
+                case 4:
+                    index = "thursday";
+                    break;
+                case 5:
+                    index = "friday";
+                    break;
+                case 6:
+                    index = "saturday";
+                    break;
+            }
+            this.#days.set(index, day);
         }
     }
 
