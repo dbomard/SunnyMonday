@@ -6,13 +6,13 @@ export class Week {
     #days;
     #holidayWeek;
 
-    constructor(dates, holidayWeek = false) {
-        this.#holidayWeek = holidayWeek;
+    constructor(dates) {
+        this.#holidayWeek = false;
         this.#days = new Map();
-        this.updateWeek(dates);
+        this.addWeek(dates);
     }
 
-    updateWeek(dates) {
+    addWeek(dates) {
         for (let date of dates) {
             let day = new Day(date);
             let index = "sunday";
