@@ -1,4 +1,5 @@
 import { Week } from "./week.js"
+import { weekTypes } from "../week.js"
 import "../dateUtils.js"
 
 export class Team {
@@ -52,23 +53,45 @@ export class Team {
     for (; index <= lastWeek; index++) {
       // console.log("Nouvelle semaine");
       let days = new Array();
-      let holiday = false;
       do {
         // console.log(day.toDateString());
         days.push(day);
         day = day.addDays(1);
       } while (day.getDay() !== 1 && day.getFullYear() == this.#year.year);
       let week = new Week(days)
-      if (this.#year.holidays.has(index)) {
+      if (this.#year.holidays.has(index) || index === 0 || index === 53) {
         week.holidayWeek = true;
       }
+      // TODO : corriger les semaines 0 et 53 lorsque les 1 et 31 janvier tombent dessus
       this.#weeks.set(index, week);
     }
   }
 
-  update() {
-    console.log(`Mise à jour de l'équipe ${this.#name}`);
+  updateWeeks() {
+    console.log(`Mise à jour des semaines pour l'équipe ${this.#name}`);
+    let weekIndex = 0;
     this.#computeWeeks();
+    let holidayWeeks = this.#year.holidays;
+    for (let index of this.#weeks.keys()) {
+      let week = this.#weeks.get(index);
+      let weekType = weekTypes.open;
+      if (holidayWeeks.has(index) || index === 0 || index === 53) {
+        console.log("Semaine de vacances : ", index);
+        weekType = weekTypes.holidays;
+      } else {
+        console.log("Semaine hors vacances : ", index);
+        weekType = this.#pattern[weekIndex];
+        weekIndex++;
+        if (weekIndex >= this.#pattern.length) {
+          weekIndex = 0;
+        }
+      }
+      for (let [dayName, day] of week.days) {
+        // console.log(dayName, day);
+        day.workingDay = weekType[dayName];
+      }
+    }
+    console.log(this.#weeks);
   }
 
   get name() {

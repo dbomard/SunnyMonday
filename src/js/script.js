@@ -48,9 +48,9 @@ function updateYearSection() {
 }
 
 function updateTeamObjects() {
-  console.log("Mise à jour des équipes");
+  // console.log("Mise à jour des équipes");
   for (let team of teams) {
-    team.update();
+    team.updateWeeks();
   }
 }
 

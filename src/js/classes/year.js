@@ -31,7 +31,7 @@ export class Year {
           let start_date = holiday.start_date;
           let end_date = holiday.end_date;
           if (start_date.startsWith(this.year) && end_date.startsWith(this.year) && !description.startsWith('Pont')) {
-            console.log(holiday);
+            // console.log(holiday);
             let day1 = new Date(start_date);
             let day2 = new Date(end_date);
             let week = day1.getWeek();
@@ -44,7 +44,7 @@ export class Year {
               console.log(`${this.#holidays.get(i).description} ajoutées`);
             }
           } else if (description === "Vacances de Noël") {
-            console.log(holiday);
+            // console.log(holiday);
             let day;
             let delta;
             if (end_date.startsWith(this.year)) {
@@ -59,6 +59,7 @@ export class Year {
               holidayWeek = -1;
             }
             this.#holidays.set(holidayWeek, { "description": description })
+            console.log(`${this.#holidays.get(holidayWeek).description} ajoutées`);
           }
         }
       });
