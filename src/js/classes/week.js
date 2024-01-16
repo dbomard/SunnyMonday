@@ -47,6 +47,10 @@ export class Week {
         this.#holidayWeek = status;
     }
 
+    get holidayWeek() {
+        return this.#holidayWeek;
+    }
+
     get days() {
         return this.#days;
     }
