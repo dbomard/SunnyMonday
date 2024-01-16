@@ -35,7 +35,6 @@ export class Team {
     for (let week of this.#weeks.keys()) {
       this.#weeks.delete(week);
     }
-    let index = 1;
     // 31 décembre sur année suivante ?
     let day = new Date(this.#year.year, 11, 31);
     let lastWeek = day.getWeek();
@@ -47,10 +46,7 @@ export class Team {
     // premier janvier sur année précédente ou année en cours ?
     day = new Date(this.#year.year, 0, 1);
     let firstWeek = day.getWeek();
-    if (firstWeek === 53 || firstWeek === 52) {
-      index = 0;
-    }
-    for (; index <= lastWeek; index++) {
+    for (let index = (firstWeek >= 52) ? 0 : 1; index <= lastWeek; index++) {
       // console.log("Nouvelle semaine");
       let days = new Array();
       do {
@@ -59,7 +55,7 @@ export class Team {
         day = day.addDays(1);
       } while (day.getDay() !== 1 && day.getFullYear() == this.#year.year);
       let week = new Week(days)
-      if (this.#year.holidays.has(index) || index === 0 || index === 53) {
+      if (this.#year.holidays.has(index) || index === 0 || index >= 52) {
         week.holidayWeek = true;
       }
       // TODO : corriger les semaines 0 et 53 lorsque les 1 et 31 janvier tombent dessus
@@ -76,10 +72,10 @@ export class Team {
       let week = this.#weeks.get(index);
       let weekType = weekTypes.open;
       if (holidayWeeks.has(index) || index === 0 || index === 53) {
-        console.log("Semaine de vacances : ", index);
+        // console.log("Semaine de vacances : ", index);
         weekType = weekTypes.holidays;
       } else {
-        console.log("Semaine hors vacances : ", index);
+        // console.log("Semaine hors vacances : ", index);
         weekType = this.#pattern[weekIndex];
         weekIndex++;
         if (weekIndex >= this.#pattern.length) {
@@ -91,7 +87,14 @@ export class Team {
         day.workingDay = weekType[dayName];
       }
     }
-    console.log(this.#weeks);
+    for (let [index, week] of this.#weeks) {
+      let weekStr = `semaine ${index}. vacances=>${week.holidayWeek} `
+      let days = "";
+      for (let [index, day] of week.days) {
+        days += index + ":" + day.workingDay + " ";
+      }
+      console.log(weekStr + days);
+    }
   }
 
   get name() {
@@ -103,7 +106,15 @@ export class Team {
   }
 
   get workingDaysCount() {
-    return 365;
+    let count = 0;
+    for (let week of this.#weeks.values()) {
+      for (let day of week.days.values()) {
+        if (day.workingDay === true) {
+          count++;
+        }
+      }
+    }
+    return count;
     // TODO: finir la méthode getWorkingdaysCount
   }
 
