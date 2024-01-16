@@ -15,6 +15,10 @@ export class Day {
         this.#workingDay = status;
     }
 
+    get workingDay() {
+        return this.#workingDay;
+    }
+
     /**
      * @returns {Date}  Date du jour
      */
