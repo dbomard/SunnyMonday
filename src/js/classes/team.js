@@ -58,10 +58,11 @@ export class Team {
         days.push(day);
         day = day.addDays(1);
       } while (day.getDay() !== 1 && day.getFullYear() == this.#year.year);
+      let week = new Week(days)
       if (this.#year.holidays.has(index)) {
-        holiday = true;
+        week.holidayWeek = true;
       }
-      this.#weeks.set(index, new Week(days, holiday));
+      this.#weeks.set(index, week);
     }
   }
 
