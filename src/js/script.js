@@ -18,7 +18,8 @@ function updateTeamsSection() {
     <td>${team.name}</td>
       <td>${team.workingDaysCount}</td>
       <td>${team.oneDayWeekends}</td>
-      <td>${team.twoDaysWeekends}</td>
+      <td>${team.saturdaySundayWeekends}</td>
+      <td>${team.sundayMondayWeekends}</td>
       <td>${team.threeDaysWeekends}</td>`;
     table.appendChild(newRow);
   });
