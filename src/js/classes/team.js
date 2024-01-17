@@ -1,6 +1,6 @@
-import { Week } from "./week.js"
-import { weekTypes } from "../week.js"
-import "../dateUtils.js"
+import { Week } from "./week.js";
+import { weekTypes } from "../week.js";
+import "../dateUtils.js";
 
 export class Team {
   #name;
@@ -10,17 +10,18 @@ export class Team {
   #pattern;
 
   #oneDayWeekends;
-  #twoDaysWeekends;
+  #saturdaySundayWeekends;
+  #sundayMondayWeekends;
   #threeDaysWeekends;
   #workingDaysCount;
   #year;
 
   /**
-   * 
-   * @param {string} name 
+   *
+   * @param {string} name
    * @param {string} color Code couleur Bootstrap 5
-   * @param {Year} currentYear 
-   * @param {Array<Object>} weeksPattern 
+   * @param {Year} currentYear
+   * @param {Array<Object>} weeksPattern
    */
   constructor(name, color, currentYear, weeksPattern) {
     this.#name = name;
@@ -46,7 +47,7 @@ export class Team {
     // premier janvier sur année précédente ou année en cours ?
     day = new Date(this.#year.year, 0, 1);
     let firstWeek = day.getWeek();
-    for (let index = (firstWeek >= 52) ? 0 : 1; index <= lastWeek; index++) {
+    for (let index = firstWeek >= 52 ? 0 : 1; index <= lastWeek; index++) {
       // console.log("Nouvelle semaine");
       let days = new Array();
       do {
@@ -54,7 +55,7 @@ export class Team {
         days.push(day);
         day = day.addDays(1);
       } while (day.getDay() !== 1 && day.getFullYear() == this.#year.year);
-      let week = new Week(days)
+      let week = new Week(days);
       if (this.#year.holidays.has(index) || index === 0 || index >= 52) {
         week.holidayWeek = true;
       }
@@ -88,12 +89,12 @@ export class Team {
       }
     }
     for (let [index, week] of this.#weeks) {
-      let weekStr = `semaine ${index}. vacances=>${week.holidayWeek} `
+      let weekStr = `semaine ${index}. vacances=>${week.holidayWeek} `;
       let days = "";
       for (let [index, day] of week.days) {
         days += index + ":" + day.workingDay + " ";
       }
-      console.log(weekStr + days);
+      // console.log(weekStr + days);
     }
   }
 
@@ -115,21 +116,121 @@ export class Team {
       }
     }
     return count;
-    // TODO: finir la méthode getWorkingdaysCount
+    // TODO: finir la méthode get WorkingdaysCount
   }
 
   get oneDayWeekends() {
-    return 1;
-    // TODO: finir la méthode get1DaysWeekend
+    let count = 0;
+    let saturday = false;
+    let sunday = false;
+    let monday = false;
+    for (let [index, week] of this.#weeks) {
+      saturday = false;
+      sunday = false;
+      monday = false;
+      if (week.days.has("saturday")) {
+        saturday = week.days.get("saturday").workingDay;
+      }
+      if (week.days.has("sunday")) {
+        sunday = week.days.get("sunday").workingDay;
+      }
+      let followingWeek = this.#weeks.get(index + 1);
+      if (this.#weeks.has(index + 1)) {
+        if (followingWeek.days.has("monday")) {
+          monday = followingWeek.days.get("monday").workingDay;
+        }
+      }
+      if (saturday && !sunday && monday) {
+        count++;
+      }
+    }
+    return count;
+    // TODO: finir la méthode get 1DaysWeekend
   }
 
-  get twoDaysWeekends() {
-    return 2;
-    // TODO: finir la méthode get2DaysWeekend
+  get saturdaySundayWeekends() {
+    let count = 0;
+    let saturday = false;
+    let sunday = false;
+    let monday = false;
+    for (let [index, week] of this.#weeks) {
+      saturday = false;
+      sunday = false;
+      monday = false;
+      if (week.days.has("saturday")) {
+        saturday = week.days.get("saturday").workingDay;
+      }
+      if (week.days.has("sunday")) {
+        sunday = week.days.get("sunday").workingDay;
+      }
+      let followingWeek = this.#weeks.get(index + 1);
+      if (this.#weeks.has(index + 1)) {
+        if (followingWeek.days.has("monday")) {
+          monday = followingWeek.days.get("monday").workingDay;
+        }
+      }
+      if (!saturday && !sunday && monday) {
+        count++;
+      }
+    }
+    return count;
+    // TODO: finir la méthode get 2DaysWeekend
+  }
+  get sundayMondayWeekends() {
+    let count = 0;
+    let saturday = false;
+    let sunday = false;
+    let monday = false;
+    for (let [index, week] of this.#weeks) {
+      saturday = false;
+      sunday = false;
+      monday = false;
+      if (week.days.has("saturday")) {
+        saturday = week.days.get("saturday").workingDay;
+      }
+      if (week.days.has("sunday")) {
+        sunday = week.days.get("sunday").workingDay;
+      }
+      let followingWeek = this.#weeks.get(index + 1);
+      if (this.#weeks.has(index + 1)) {
+        if (followingWeek.days.has("monday")) {
+          monday = followingWeek.days.get("monday").workingDay;
+        }
+      }
+      if (saturday && !sunday && !monday) {
+        count++;
+      }
+    }
+    return count;
+    // TODO: finir la méthode get sundayMondayWeekends
   }
 
   get threeDaysWeekends() {
-    return 3;
-    // TODO: finir la méthode get3DaysWeekend
+    let count = 0;
+    let saturday = false;
+    let sunday = false;
+    let monday = false;
+    for (let [index, week] of this.#weeks) {
+      saturday = false;
+      sunday = false;
+      monday = false;
+      if (week.days.has("saturday")) {
+        saturday = week.days.get("saturday").workingDay;
+      }
+      if (week.days.has("sunday")) {
+        sunday = week.days.get("sunday").workingDay;
+      }
+      let followingWeek = this.#weeks.get(index + 1);
+      if (this.#weeks.has(index + 1)) {
+        if (followingWeek.days.has("monday")) {
+          monday = followingWeek.days.get("monday").workingDay;
+        }
+      }
+      if (!saturday && !sunday && !monday) {
+        count++;
+      }
+    }
+    return count;
+    // TODO: finir la méthode get threeDaysWeekends
   }
 }
