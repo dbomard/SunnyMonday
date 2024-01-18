@@ -96,6 +96,23 @@ export class Team {
       }
       // console.log(weekStr + days);
     }
+
+    // Ajout des jours fériés
+    let publicHolidays = this.#year.publicHolidays;
+    let days = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    for (let date of publicHolidays.values()) {
+      let index = date.getWeek();
+      let dayName = days[date.getDay()];
+      this.#weeks.get(index).days.get(dayName).workingDay = false;
+    }
   }
 
   get name() {
