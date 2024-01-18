@@ -132,6 +132,9 @@ export class Team {
         }
       }
     }
+    if (this.name !== "Mediathèque") {
+      count -= 25; // 25 jours de congés annuel sauf pour l'équipe Médiathèque
+    }
     return count;
     // TODO: finir la méthode get WorkingdaysCount
   }

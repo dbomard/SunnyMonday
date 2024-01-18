@@ -2,7 +2,6 @@ import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
 import { weekTypes } from "./week.js";
 
-
 const currentYear = new Year();
 const teams = new Array(5);
 
@@ -17,6 +16,7 @@ function updateTeamsSection() {
     newRow.innerHTML = `
     <td>${team.name}</td>
       <td>${team.workingDaysCount}</td>
+      <td>${team.workingDaysCount * 7}</td>
       <td>${team.oneDayWeekends}</td>
       <td>${team.saturdaySundayWeekends}</td>
       <td>${team.sundayMondayWeekends}</td>
@@ -33,17 +33,17 @@ function updateYearSection() {
   let days = currentYear.offDays;
   days = currentYear.publicHolidays;
   let options = {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric'
-  }
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
   days.forEach((date, day) => {
     let newDay = document.createElement("td");
     newDay.innerText = `${day}`;
     tableName.appendChild(newDay);
     let newDate = document.createElement("td");
-    newDate.innerText = `${date.toLocaleDateString('fr-FR', options)}`;
+    newDate.innerText = `${date.toLocaleDateString("fr-FR", options)}`;
     tableDate.appendChild(newDate);
   });
 }
@@ -57,7 +57,8 @@ function updateTeamObjects() {
 
 async function changeYear(event) {
   let newYear = event.target.value;
-  await currentYear.setYear(newYear)
+  await currentYear
+    .setYear(newYear)
     .then(() => updateTeamObjects())
     .then(() => updateYearSection())
     .then(() => updateTeamsSection());
@@ -71,10 +72,32 @@ document.addEventListener("DOMContentLoaded", () => {
   yearInputElt.setAttribute("min", parseInt(yearInputElt.value) - 6);
   yearInputElt.setAttribute("max", parseInt(yearInputElt.value) + 1);
   yearInputElt.addEventListener("change", changeYear);
-  teams[0] = new Team("Verte", "table-success", currentYear, [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD]);
-  teams[1] = new Team("Rouge", "table-danger", currentYear, [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA]);
-  teams[2] = new Team("Jaune", "table-warning", currentYear, [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB]);
-  teams[3] = new Team("Bleue", "table-primary", currentYear, [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC]);
-  teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [weekTypes.open]);
+  teams[0] = new Team("Verte", "table-success", currentYear, [
+    weekTypes.typeA,
+    weekTypes.typeB,
+    weekTypes.typeC,
+    weekTypes.typeD,
+  ]);
+  teams[1] = new Team("Rouge", "table-danger", currentYear, [
+    weekTypes.typeB,
+    weekTypes.typeC,
+    weekTypes.typeD,
+    weekTypes.typeA,
+  ]);
+  teams[2] = new Team("Jaune", "table-warning", currentYear, [
+    weekTypes.typeC,
+    weekTypes.typeD,
+    weekTypes.typeA,
+    weekTypes.typeB,
+  ]);
+  teams[3] = new Team("Bleue", "table-primary", currentYear, [
+    weekTypes.typeD,
+    weekTypes.typeA,
+    weekTypes.typeB,
+    weekTypes.typeC,
+  ]);
+  teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [
+    weekTypes.open,
+  ]);
   yearInputElt.dispatchEvent(evt);
 });
