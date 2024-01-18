@@ -110,6 +110,12 @@ export class Team {
     ];
     for (let date of publicHolidays.values()) {
       let index = date.getWeek();
+      if (date.getMonth() === 0 && index === 53) {
+        index = 0;
+      }
+      if (date.getMonth() === 11 && index === 1) {
+        index = 53;
+      }
       let dayName = days[date.getDay()];
       this.#weeks.get(index).days.get(dayName).workingDay = false;
     }
