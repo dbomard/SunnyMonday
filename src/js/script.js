@@ -15,12 +15,12 @@ function updateTeamsSection() {
     newRow.classList.add(team.color);
     newRow.innerHTML = `
     <td>${team.name}</td>
-      <td>${team.workingDaysCount}</td>
-      <td>${team.workingDaysCount * 7}</td>
-      <td>${team.oneDayWeekends}</td>
-      <td>${team.saturdaySundayWeekends}</td>
-      <td>${team.sundayMondayWeekends}</td>
-      <td>${team.threeDaysWeekends}</td>`;
+      <td class="spinner">${team.workingDaysCount}</td>
+      <td class="spinner">${team.workingDaysCount * 7}</td>
+      <td class="spinner">${team.oneDayWeekends}</td>
+      <td class="spinner">${team.saturdaySundayWeekends}</td>
+      <td class="spinner">${team.sundayMondayWeekends}</td>
+      <td class="spinner">${team.threeDaysWeekends}</td>`;
     table.appendChild(newRow);
   });
 }
@@ -43,6 +43,7 @@ function updateYearSection() {
     newDay.innerText = `${day}`;
     tableName.appendChild(newDay);
     let newDate = document.createElement("td");
+    newDate.classList.add("spinner");
     newDate.innerText = `${date.toLocaleDateString("fr-FR", options)}`;
     tableDate.appendChild(newDate);
   });
@@ -56,6 +57,12 @@ function updateTeamObjects() {
 }
 
 async function changeYear(event) {
+  let waitingElements = document.querySelectorAll(".spinner");
+  for (let element of waitingElements) {
+    element.innerText = "";
+    element.innerHTML = `<span class="spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>
+      <span role="status" class="text-secondary">Loading...</span>`;
+  }
   let newYear = event.target.value;
   await currentYear
     .setYear(newYear)
