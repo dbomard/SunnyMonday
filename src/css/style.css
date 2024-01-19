@@ -1,3 +1,7 @@
 #yearInput {
     width: 10ch;
 }
+
+.hidden {
+    display: none;
+}
