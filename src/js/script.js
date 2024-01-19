@@ -5,6 +5,21 @@ import { weekTypes } from "./week.js";
 const currentYear = new Year();
 const teams = new Array(5);
 
+function selectTeam(event) {
+  l
+  let text = document.querySelector("#team-detail p");
+  text.classList.add("hidden");
+  let team = event.currentTarget.id.substring(4);
+  console.log("Equipe cliquée: " + team);
+  let sectionCalendar = document.querySelector("#calendar");
+  let monthTemplate = document.getElementById("month-template");
+  let Months = new Array();
+  for (let month = 0; month < 12; month++) {
+    Months.push(monthTemplate.content.cloneNode(true));
+    sectionCalendar.appendChild(Months[month]);
+  }
+}
+
 function updateTeamsSection() {
   // MAJ Affichage
   let table = document.querySelector("#table-teams");
@@ -22,6 +37,7 @@ function updateTeamsSection() {
       <td class="spinner">${team.sundayMondayWeekends}</td>
       <td class="spinner">${team.threeDaysWeekends}</td>`;
     table.appendChild(newRow);
+    newRow.addEventListener("click", selectTeam);
   });
 }
 
