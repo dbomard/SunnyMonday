@@ -6,17 +6,29 @@ const currentYear = new Year();
 const teams = new Array(5);
 
 function selectTeam(event) {
-  l
+
   let text = document.querySelector("#team-detail p");
   text.classList.add("hidden");
-  let team = event.currentTarget.id.substring(4);
-  console.log("Equipe cliquée: " + team);
+  let teamIndex = event.currentTarget.id.substring(4);
+  let team = teams[teamIndex];
+  console.log("Equipe cliquée: " + teamIndex);
   let sectionCalendar = document.querySelector("#calendar");
   let monthTemplate = document.getElementById("month-template");
-  let Months = new Array();
+  let months = new Array();
+  const weeks = team.weeks.entries();
   for (let month = 0; month < 12; month++) {
-    Months.push(monthTemplate.content.cloneNode(true));
-    sectionCalendar.appendChild(Months[month]);
+    let newMonth = monthTemplate.content.cloneNode(true)
+    let tableBody = newMonth.getElementsByTagName("tbody")[0];
+    let continuer = true;
+    do {
+      let [weekNumber, week] = weeks.next().value;
+      let newRow = document.createElement('tr');
+      newRow.innerHTML = `<th>S${weekNumber}</th>`
+      continuer = weekNumber % 5 === 0 ? false : true;
+      tableBody.appendChild(newRow);
+    } while (continuer);
+    months.push(newMonth);
+    sectionCalendar.appendChild(months[month]);
   }
 }
 
