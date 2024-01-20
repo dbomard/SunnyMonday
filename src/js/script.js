@@ -6,7 +6,20 @@ const currentYear = new Year();
 const teams = new Array(5);
 
 function selectTeam(event) {
-
+  let mois = [
+    "janvier",
+    "février",
+    "mars",
+    "avril",
+    "mai",
+    "juin",
+    "juillet",
+    "août",
+    "septembre",
+    "octobre",
+    "novembre",
+    "décembre",
+  ];
   let text = document.querySelector("#team-detail p");
   text.classList.add("hidden");
   let teamIndex = event.currentTarget.id.substring(4);
@@ -17,13 +30,15 @@ function selectTeam(event) {
   let months = new Array();
   const weeks = team.weeks.entries();
   for (let month = 0; month < 12; month++) {
-    let newMonth = monthTemplate.content.cloneNode(true)
-    let tableBody = newMonth.getElementsByTagName("tbody")[0];
+    let newMonth = monthTemplate.content.cloneNode(true);
+    let caption = newMonth.querySelector("caption");
+    caption.innerText = mois[month];
+    let tableBody = newMonth.querySelector("tbody");
     let continuer = true;
     do {
       let [weekNumber, week] = weeks.next().value;
-      let newRow = document.createElement('tr');
-      newRow.innerHTML = `<th>S${weekNumber}</th>`
+      let newRow = document.createElement("tr");
+      newRow.innerHTML = `<th>S${weekNumber}</th>`;
       continuer = weekNumber % 5 === 0 ? false : true;
       tableBody.appendChild(newRow);
     } while (continuer);
