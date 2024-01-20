@@ -129,6 +129,10 @@ export class Team {
     return this.#color;
   }
 
+  get weeks() {
+    return this.#weeks;
+  }
+
   get workingDaysCount() {
     let count = 0;
     for (let week of this.#weeks.values()) {
@@ -230,7 +234,6 @@ export class Team {
     return count;
     // TODO: finir la méthode get sundayMondayWeekends
   }
-
   get threeDaysWeekends() {
     let count = 0;
     let saturday = false;
