@@ -6,7 +6,7 @@ const currentYear = new Year();
 const teams = new Array(5);
 
 function selectTeam(event) {
-  let mois = [
+  let monthNames = [
     "janvier",
     "février",
     "mars",
@@ -25,26 +25,44 @@ function selectTeam(event) {
   let teamIndex = event.currentTarget.id.substring(4);
   let team = teams[teamIndex];
   console.log("Equipe cliquée: " + teamIndex);
-  let sectionCalendar = document.querySelector("#calendar");
-  let monthTemplate = document.getElementById("month-template");
-  let months = new Array();
-  const weeks = team.weeks.entries();
-  for (let month = 0; month < 12; month++) {
-    let newMonth = monthTemplate.content.cloneNode(true);
-    let caption = newMonth.querySelector("caption");
-    caption.innerText = mois[month];
-    let tableBody = newMonth.querySelector("tbody");
-    let continuer = true;
-    do {
-      let [weekNumber, week] = weeks.next().value;
-      let newRow = document.createElement("tr");
-      newRow.innerHTML = `<th>S${weekNumber}</th>`;
-      continuer = weekNumber % 5 === 0 ? false : true;
-      tableBody.appendChild(newRow);
-    } while (continuer);
-    months.push(newMonth);
-    sectionCalendar.appendChild(months[month]);
+  let calendar = document.querySelector("#calendar");
+  calendar.innerHTML = "";
+  // let calendarTemplate = document.getElementById("calendar-template");
+  // let months = new Array();
+  // const weeks = team.weeks.entries();
+  // for (let month = 0; month < 12; month++) {
+  //   let newMonth = monthTemplate.content.cloneNode(true);
+  //   let caption = newMonth.querySelector("caption");
+  //   caption.innerText = mois[month];
+  //   let tableBody = newMonth.querySelector("tbody");
+  //   let continuer = true;
+  //   do {
+  //     let [weekNumber, week] = weeks.next().value;
+  //     let newRow = document.createElement("tr");
+  //     newRow.innerHTML = `<th>S${weekNumber}</th>`;
+  //     continuer = weekNumber % 5 === 0 ? false : true;
+  //     tableBody.appendChild(newRow);
+  //   } while (continuer);
+  //   months.push(newMonth);
+  //   sectionCalendar.appendChild(months[month]);
+  // }
+
+  let headingRow = calendar.querySelector("thead tr");
+  for (let i = 1; i <= 31; i++) {
+    let day = document.createElement("th");
+    day.innerText = i;
+    headingRow.appendChild(day);
   }
+  let tableBody = calendar.querySelector('tbody');
+
+  for (let month of monthNames) {
+    let newMonth = document.createElement('tr');
+    let newHeader = document.createElement('th');
+    newHeader.innerText = month;
+    newMonth.appendChild(newHeader);
+    tableBody.appendChild(newMonth);
+  }
+
 }
 
 function updateTeamsSection() {

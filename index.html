@@ -65,7 +65,8 @@
                 <p class="fs-6 text-secondary">Cliquer sur une des lignes du tableau pour obtenir le calendrier
                     détaillé d'une équipe.
                 </p>
-                <div class="row" id="calendar"></div>
+                <div class="row" id="calendar">
+                </div>
             </section>
         </main>
     </div>
@@ -78,7 +79,22 @@
 
 </html>
 
-<template id="month-template">
+<template id="calendar-template" <div class="col-auto">
+    <table class="table table-bordered">
+        <caption>Calendrier</caption>
+        <thead>
+            <tr>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+    </div>
+</template>
+
+<!-- <template id="calendar-template">
     <div class="col-3">
         <table class="table table-bordered">
             <caption>Mois</caption>
@@ -99,4 +115,4 @@
             </tbody>
         </table>
     </div>
-</template>
+</template> -->
