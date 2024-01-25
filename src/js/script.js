@@ -1,9 +1,18 @@
 import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
+import { Day } from "./classes/day.js";
 import { weekTypes } from "./week.js";
 
 const currentYear = new Year();
+/**@type {Array.<Team>} */
 const teams = new Array(5);
+
+function resetCalendar() {
+  let text = document.querySelector("#team-detail p");
+  text.classList.remove("hidden");
+  let calendar = document.querySelector("#calendar");
+  calendar.innerHTML = "";
+}
 
 function selectTeam(event) {
   let monthNames = [
@@ -20,6 +29,7 @@ function selectTeam(event) {
     "novembre",
     "décembre",
   ];
+  let dayNames = ["D", "L", "M", "M", "J", "V", "S"];
   let text = document.querySelector("#team-detail p");
   text.classList.add("hidden");
   let teamIndex = event.currentTarget.id.substring(4);
@@ -27,42 +37,44 @@ function selectTeam(event) {
   console.log("Equipe cliquée: " + teamIndex);
   let calendar = document.querySelector("#calendar");
   calendar.innerHTML = "";
-  // let calendarTemplate = document.getElementById("calendar-template");
-  // let months = new Array();
-  // const weeks = team.weeks.entries();
-  // for (let month = 0; month < 12; month++) {
-  //   let newMonth = monthTemplate.content.cloneNode(true);
-  //   let caption = newMonth.querySelector("caption");
-  //   caption.innerText = mois[month];
-  //   let tableBody = newMonth.querySelector("tbody");
-  //   let continuer = true;
-  //   do {
-  //     let [weekNumber, week] = weeks.next().value;
-  //     let newRow = document.createElement("tr");
-  //     newRow.innerHTML = `<th>S${weekNumber}</th>`;
-  //     continuer = weekNumber % 5 === 0 ? false : true;
-  //     tableBody.appendChild(newRow);
-  //   } while (continuer);
-  //   months.push(newMonth);
-  //   sectionCalendar.appendChild(months[month]);
-  // }
+  let calendarTemplate = document.getElementById("calendar-template");
+  let clonedCalendarTemplate = calendarTemplate.content.cloneNode(true);
+  calendar.appendChild(clonedCalendarTemplate);
 
   let headingRow = calendar.querySelector("thead tr");
   for (let i = 1; i <= 31; i++) {
     let day = document.createElement("th");
     day.innerText = i;
+    day.classList.add("table-dark");
     headingRow.appendChild(day);
   }
-  let tableBody = calendar.querySelector('tbody');
-
-  for (let month of monthNames) {
-    let newMonth = document.createElement('tr');
-    let newHeader = document.createElement('th');
-    newHeader.innerText = month;
-    newMonth.appendChild(newHeader);
-    tableBody.appendChild(newMonth);
+  let tableBody = calendar.querySelector("tbody");
+  let currentMonth = -1;
+  let currentRaw = null;
+  for (let week of team.weeks.values()) {
+    /**@type {Day} day */
+    let day;
+    for (day of week.days.values()) {
+      if (day.date.getMonth() !== currentMonth) {
+        currentMonth++;
+        currentRaw = document.createElement("tr");
+        let newHeader = document.createElement("th");
+        newHeader.innerText = monthNames[currentMonth];
+        newHeader.classList.add("table-dark");
+        currentRaw.appendChild(newHeader);
+        tableBody.appendChild(currentRaw);
+      }
+      let name = dayNames[day.date.getDay()];
+      let newDay = document.createElement("td");
+      if (day.workingDay === true) {
+        newDay.classList.add(team.color);
+      } else {
+        newDay.classList.add("table-secondary");
+      }
+      newDay.innerText = name;
+      currentRaw.appendChild(newDay);
+    }
   }
-
 }
 
 function updateTeamsSection() {
@@ -129,7 +141,8 @@ async function changeYear(event) {
     .setYear(newYear)
     .then(() => updateTeamObjects())
     .then(() => updateYearSection())
-    .then(() => updateTeamsSection());
+    .then(() => updateTeamsSection())
+    .then(() => resetCalendar());
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -164,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
     weekTypes.typeB,
     weekTypes.typeC,
   ]);
-  teams[4] = new Team("Mediathèque", "table-secondary", currentYear, [
+  teams[4] = new Team("Mediathèque", "table-light", currentYear, [
     weekTypes.open,
   ]);
   yearInputElt.dispatchEvent(evt);
