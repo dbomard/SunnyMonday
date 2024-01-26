@@ -75,6 +75,7 @@ export class Team {
       if (holidayWeeks.has(index) || index === 0 || index === 53) {
         // console.log("Semaine de vacances : ", index);
         weekType = weekTypes.holidays;
+        week.holidayWeek = true;
       } else {
         // console.log("Semaine hors vacances : ", index);
         weekType = this.#pattern[weekIndex];
@@ -89,7 +90,7 @@ export class Team {
       }
     }
     for (let [index, week] of this.#weeks) {
-      let weekStr = `semaine ${index}. vacances=>${week.holidayWeek} `;
+      // let weekStr = `semaine ${index}. vacances=>${week.holidayWeek} `;
       let days = "";
       for (let [index, day] of week.days) {
         days += index + ":" + day.workingDay + " ";

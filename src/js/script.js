@@ -68,8 +68,12 @@ function selectTeam(event) {
       let newDay = document.createElement("td");
       if (day.workingDay === true) {
         newDay.classList.add(team.color);
-      } else {
+      }
+      else {
         newDay.classList.add("table-secondary");
+      }
+      if (week.holidayWeek === true) {
+        newDay.classList.add("holiday");
       }
       newDay.innerText = name;
       currentRaw.appendChild(newDay);

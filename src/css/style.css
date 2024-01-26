@@ -5,3 +5,11 @@
 .hidden {
     display: none;
 }
+
+.holiday {
+    border-top: solid brown 2px !important;
+    /* position: absolute; */
+    width: 100%;
+    height: 5px;
+    background-color: brown;
+}
