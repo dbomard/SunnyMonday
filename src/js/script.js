@@ -150,8 +150,12 @@ async function changeYear(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  let yearInputElt = document.querySelector("#yearInput");
+  let startingDateElt = document.querySelector("#startingDate");
+  let endingDateElt = document.querySelector("#endingDate");
   let date = new Date();
+  startingDateElt.value = `${date.getFullYear()}-01-01`;
+  endingDateElt.value = `${date.getFullYear()}-12-31`;
+
   yearInputElt.value = date.getFullYear();
   const evt = new Event("change");
   yearInputElt.setAttribute("min", parseInt(yearInputElt.value) - 6);
