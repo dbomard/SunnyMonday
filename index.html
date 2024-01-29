@@ -16,7 +16,7 @@
             <h1 class="text-center mb-3 text-primary">Les lundis au soleil</h1>
         </header>
         <main>
-            <section id="year">
+            <!-- <section id="year">
                 <h2 class="mb-3 text-secondary">Détails de l'année</h2>
                 <div class="row">
                     <div class="col-auto">
@@ -39,6 +39,32 @@
                         </tr>
                     </tbody>
                 </table>
+            </section> -->
+            <section id="parameters">
+                <h2 class="mb-3 text-secondary">Paramètres</h2>
+                <div class="row">
+                    <label class="form-label">Période :</label>
+                    <div class="col-auto">
+                        <div class="input-group mb-3">
+                            <span for="startingDate" class="input-group-text">Date de début :</span>
+                            <input type="date" class="form-control" id="startingDate" />
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="input-group mb-3">
+                            <span for="endingDate" class="input-group-text">Date de fin :</span>
+                            <input type="date" class="form-control" id="endingDate" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-auto">
+                        <label class="form-label">Vacances scolaires :</label>
+                        <ul class="list-group" id="holidays">
+
+                        </ul>
+                    </div>
+                </div>
             </section>
 
             <section id="teams">
