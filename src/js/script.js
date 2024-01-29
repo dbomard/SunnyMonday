@@ -1,11 +1,69 @@
 import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
 import { Day } from "./classes/day.js";
+import { Holiday } from "./classes/holiday.js"
 import { weekTypes } from "./week.js";
+import { getHolidays } from "./sockets.js";
 
 const currentYear = new Year();
+
 /**@type {Array.<Team>} */
 const teams = new Array(5);
+
+/**@type {Array.<Holiday>} */
+const holidays = new Array();
+
+async function initialisation() {
+  // Création des équipes
+  teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
+  weekTypes.typeC, weekTypes.typeD], "#98eb34");
+  teams[1] = new Team("Rouge", [weekTypes.typeB, weekTypes.typeC,
+  weekTypes.typeD, weekTypes.typeA], "#eb4634");
+  teams[2] = new Team("Jaune", [weekTypes.typeC, weekTypes.typeD,
+  weekTypes.typeA, weekTypes.typeB], "#eb4634");
+  teams[3] = new Team("Bleue", [weekTypes.typeD, weekTypes.typeA,
+  weekTypes.typeB, weekTypes.typeC], "#3480eb");
+  teams[4] = new Team("Mediathèque", [weekTypes.open]);
+
+  // Création de la liste des vacances
+  await getHolidays()
+    .then((results) => {
+      for (let holiday of results) {
+        let newHoliday = new Holiday(holiday.description, new Date(holiday.start_date), new Date(holiday.end_date));
+        holidays.push(newHoliday);
+      }
+    })
+    .then(() => {
+      let today = new Date();
+      let startingDateElt = document.querySelector("#startingDate");
+      let endingDateElt = document.querySelector("#endingDate");
+      startingDateElt.value = `${today.getFullYear()}-01-01`;
+      endingDateElt.value = `${today.getFullYear()}-12-31`;
+      const evt = new Event("change");
+      startingDateElt.addEventListener("change", changeInterval);
+      endingDateElt.addEventListener("change", changeInterval);
+      startingDateElt.dispatchEvent(evt);
+    })
+
+}
+
+function changeInterval() {
+  let startingDateElt = document.querySelector("#startingDate");
+  let endingDateElt = document.querySelector("#endingDate");
+  let startingDate = new Date(startingDateElt.value);
+  let endingDate = new Date(endingDateElt.value);
+  let holidayList = document.querySelector("#holidays");
+  holidayList.innerHTML = "";
+  let format = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  for (let holiday of holidays) {
+    if ((holiday.startingDate > startingDate && holiday.startingDate < endingDate) ||
+      (holiday.endingDate > startingDate && holiday.endingDate < endingDate)) {
+      let newItem = document.createElement('li');
+      newItem.innerText = `${holiday.name} du ${holiday.startingDate.toLocaleDateString('fr-FR', format)} au ${holiday.endingDate.toLocaleDateString('fr-FR', format)}`;
+      holidayList.appendChild(newItem);
+    }
+  }
+}
 
 function resetCalendar() {
   let text = document.querySelector("#team-detail p");
@@ -150,24 +208,5 @@ async function changeYear(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  let today = new Date();
-  let startingDateElt = document.querySelector("#startingDate");
-  let endingDateElt = document.querySelector("#endingDate");
-  startingDateElt.value = `${today.getFullYear()}-01-01`;
-  endingDateElt.value = `${today.getFullYear()}-12-31`;
-
-  teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
-  weekTypes.typeC, weekTypes.typeD], "#98eb34");
-  teams[1] = new Team("Rouge", [weekTypes.typeB, weekTypes.typeC,
-  weekTypes.typeD, weekTypes.typeA], "#eb4634");
-  teams[2] = new Team("Jaune", [weekTypes.typeC, weekTypes.typeD,
-  weekTypes.typeA, weekTypes.typeB], "#eb4634");
-  teams[3] = new Team("Bleue", [weekTypes.typeD, weekTypes.typeA,
-  weekTypes.typeB, weekTypes.typeC], "#3480eb");
-  teams[4] = new Team("Mediathèque", [weekTypes.open]);
-
-  const evt = new Event("change");
-  startingDateElt.addEventListener("change", changeInterval);
-  endingDateElt.addEventListener("change", changeInterval);
-  yearInputElt.dispatchEvent(evt);
+  initialisation();
 });
