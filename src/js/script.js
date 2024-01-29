@@ -1,20 +1,23 @@
-import { Year } from "./classes/year.js";
+// import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
 import { Day } from "./classes/day.js";
 import { Holiday } from "./classes/holiday.js"
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
 
-const currentYear = new Year();
+// const currentYear = new Year();
 
-/**@type {Array.<Team>} */
+/**@type {Array.<Team>} teams */
 const teams = new Array(5);
 
-/**@type {Array.<Holiday>} */
+/**@type {Date} dateReference - Date de référence pour le calcul des semaines */
+const dateReference = new Date("2024-09-02");
+
+/**@type {Array.<Holiday>} holidays */
 const holidays = new Array();
 
 /**
- * 
+ * Tri selon la date de début de vacances
  * @param {Holiday} holidayA 
  * @param {Holiday} holidayB 
  */
@@ -31,13 +34,13 @@ function sortHolidays(holidayA, holidayB) {
 async function initialisation() {
   // Création des équipes
   teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
-  weekTypes.typeC, weekTypes.typeD], "#98eb34");
+  weekTypes.typeC, weekTypes.typeD], "#80ff80");
   teams[1] = new Team("Rouge", [weekTypes.typeB, weekTypes.typeC,
-  weekTypes.typeD, weekTypes.typeA], "#eb4634");
+  weekTypes.typeD, weekTypes.typeA], "#ff8080");
   teams[2] = new Team("Jaune", [weekTypes.typeC, weekTypes.typeD,
-  weekTypes.typeA, weekTypes.typeB], "#eb4634");
+  weekTypes.typeA, weekTypes.typeB], "#ffff80");
   teams[3] = new Team("Bleue", [weekTypes.typeD, weekTypes.typeA,
-  weekTypes.typeB, weekTypes.typeC], "#3480eb");
+  weekTypes.typeB, weekTypes.typeC], "#80ffff");
   teams[4] = new Team("Mediathèque", [weekTypes.open]);
 
   // Création de la liste des vacances
@@ -83,18 +86,35 @@ function changeInterval(e) {
   let endingDateElt = document.querySelector("#endingDate");
   let startingDate = new Date(startingDateElt.value);
   let endingDate = new Date(endingDateElt.value);
+
+  // La date de début est toujours inférieure à la date de fin
+  // et la date de fin est toujours supérieure à la date de début
+  if (startingDate > endingDate && e.currentTarget.id === 'startingDate') {
+    startingDate = new Date(endingDateElt.value);
+    startingDateElt.value = endingDateElt.value;
+  } else if (endingDate < startingDate && e.currentTarget.id === 'endingDate') {
+    endingDate = new Date(startingDateElt.value);
+    endingDateElt.value = startingDateElt.value;
+  }
+
+  // Affichage de la liste des vacances scolaires pour l'intervalle de temps
   let holidayList = document.querySelector("#holidays");
   holidayList.innerHTML = "";
   let format = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
   for (let holiday of holidays) {
     if ((holiday.startingDate > startingDate && holiday.startingDate < endingDate) ||
-      (holiday.endingDate > startingDate && holiday.endingDate < endingDate)) {
+      (holiday.endingDate > startingDate && holiday.endingDate < endingDate) ||
+      (startingDate > holiday.startingDate && endingDate < holiday.endingDate)) {
       let newItem = document.createElement('li');
       newItem.classList.add('list-group-item');
       newItem.innerText = `${holiday.name} du ${holiday.startingDate.toLocaleDateString('fr-FR', format)} au ${holiday.endingDate.toLocaleDateString('fr-FR', format)}`;
       holidayList.appendChild(newItem);
     }
   }
+
+  // Mise à jour des équipes
+  updateTeamObjects(startingDate, endingDate);
+  updateTeamsSection();
 }
 
 function resetCalendar() {
@@ -178,7 +198,7 @@ function updateTeamsSection() {
   teams.forEach((team, index) => {
     let newRow = document.createElement("tr");
     newRow.id = `team${index}`;
-    newRow.classList.add(team.color);
+    newRow.style.backgroundColor = team.color;
     newRow.innerHTML = `
     <td>${team.name}</td>
       <td class="spinner">${team.workingDaysCount}</td>
@@ -192,51 +212,19 @@ function updateTeamsSection() {
   });
 }
 
-function updateYearSection() {
-  let tableName = document.querySelector("#dayOffName");
-  tableName.innerHTML = `<th scope="row">Jour férié</th>`;
-  let tableDate = document.querySelector("#dayOffDate");
-  tableDate.innerHTML = `<th scope="row">Date</th>`;
-  let days = currentYear.offDays;
-  days = currentYear.publicHolidays;
-  let options = {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  };
-  days.forEach((date, day) => {
-    let newDay = document.createElement("td");
-    newDay.innerText = `${day}`;
-    tableName.appendChild(newDay);
-    let newDate = document.createElement("td");
-    newDate.classList.add("spinner");
-    newDate.innerText = `${date.toLocaleDateString("fr-FR", options)}`;
-    tableDate.appendChild(newDate);
-  });
-}
-
-function updateTeamObjects() {
-  // console.log("Mise à jour des équipes");
-  for (let team of teams) {
-    team.updateWeeks();
+/**
+ * 
+ * @param {Date} startingDate - Date de début
+ * @param {Date} endingDate - Date de fin
+ */
+function updateTeamObjects(startingDate, endingDate) {
+  let oneWeek = 604800000; // nombre de millisecondes en 1 semaine = 7j * 24h *60min * 60s * 1000ms
+  let delta = Math.ceil((dateReference.getTime() - startingDate.getTime()) / oneWeek);
+  if (dateReference < startingDate) {
+    //dateReference avant date de début
+    delta = Math.floor((startingDate.getTime() - dateReference.getTime()) / oneWeek);
   }
-}
-
-async function changeYear(event) {
-  let waitingElements = document.querySelectorAll(".spinner");
-  for (let element of waitingElements) {
-    element.innerText = "";
-    element.innerHTML = `<span class="spinner-border spinner-border-sm text-secondary" aria-hidden="true"></span>
-      <span role="status" class="text-secondary">Loading...</span>`;
-  }
-  let newYear = event.target.value;
-  await currentYear
-    .setYear(newYear)
-    .then(() => updateTeamObjects())
-    .then(() => updateYearSection())
-    .then(() => updateTeamsSection())
-    .then(() => resetCalendar());
+  console.log(delta);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
