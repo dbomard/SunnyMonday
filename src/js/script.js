@@ -150,43 +150,24 @@ async function changeYear(event) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  let today = new Date();
   let startingDateElt = document.querySelector("#startingDate");
   let endingDateElt = document.querySelector("#endingDate");
-  let date = new Date();
-  startingDateElt.value = `${date.getFullYear()}-01-01`;
-  endingDateElt.value = `${date.getFullYear()}-12-31`;
+  startingDateElt.value = `${today.getFullYear()}-01-01`;
+  endingDateElt.value = `${today.getFullYear()}-12-31`;
 
-  yearInputElt.value = date.getFullYear();
+  teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
+  weekTypes.typeC, weekTypes.typeD], "#98eb34");
+  teams[1] = new Team("Rouge", [weekTypes.typeB, weekTypes.typeC,
+  weekTypes.typeD, weekTypes.typeA], "#eb4634");
+  teams[2] = new Team("Jaune", [weekTypes.typeC, weekTypes.typeD,
+  weekTypes.typeA, weekTypes.typeB], "#eb4634");
+  teams[3] = new Team("Bleue", [weekTypes.typeD, weekTypes.typeA,
+  weekTypes.typeB, weekTypes.typeC], "#3480eb");
+  teams[4] = new Team("Mediathèque", [weekTypes.open]);
+
   const evt = new Event("change");
-  yearInputElt.setAttribute("min", parseInt(yearInputElt.value) - 6);
-  yearInputElt.setAttribute("max", parseInt(yearInputElt.value) + 1);
-  yearInputElt.addEventListener("change", changeYear);
-  teams[0] = new Team("Verte", "table-success", currentYear, [
-    weekTypes.typeA,
-    weekTypes.typeB,
-    weekTypes.typeC,
-    weekTypes.typeD,
-  ]);
-  teams[1] = new Team("Rouge", "table-danger", currentYear, [
-    weekTypes.typeB,
-    weekTypes.typeC,
-    weekTypes.typeD,
-    weekTypes.typeA,
-  ]);
-  teams[2] = new Team("Jaune", "table-warning", currentYear, [
-    weekTypes.typeC,
-    weekTypes.typeD,
-    weekTypes.typeA,
-    weekTypes.typeB,
-  ]);
-  teams[3] = new Team("Bleue", "table-primary", currentYear, [
-    weekTypes.typeD,
-    weekTypes.typeA,
-    weekTypes.typeB,
-    weekTypes.typeC,
-  ]);
-  teams[4] = new Team("Mediathèque", "table-light", currentYear, [
-    weekTypes.open,
-  ]);
+  startingDateElt.addEventListener("change", changeInterval);
+  endingDateElt.addEventListener("change", changeInterval);
   yearInputElt.dispatchEvent(evt);
 });
