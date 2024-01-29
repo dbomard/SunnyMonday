@@ -13,6 +13,21 @@ const teams = new Array(5);
 /**@type {Array.<Holiday>} */
 const holidays = new Array();
 
+/**
+ * 
+ * @param {Holiday} holidayA 
+ * @param {Holiday} holidayB 
+ */
+function sortHolidays(holidayA, holidayB) {
+  if (holidayA.startingDate === holidayB.startingDate) {
+    return 0;
+  }
+  if (holidayA.startingDate < holidayB.startingDate) {
+    return -1;
+  }
+  return 1;
+}
+
 async function initialisation() {
   // Création des équipes
   teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
@@ -29,9 +44,16 @@ async function initialisation() {
   await getHolidays()
     .then((results) => {
       for (let holiday of results) {
-        let newHoliday = new Holiday(holiday.description, new Date(holiday.start_date), new Date(holiday.end_date));
-        holidays.push(newHoliday);
+        if (!holiday.description.toLowerCase().includes("pont")) {
+          let newHoliday = new Holiday(
+            holiday.description,
+            new Date(holiday.start_date),
+            new Date(holiday.end_date)
+          );
+          holidays.push(newHoliday);
+        }
       }
+      holidays.sort(sortHolidays);
     })
     .then(() => {
       let today = new Date();
@@ -39,6 +61,15 @@ async function initialisation() {
       let endingDateElt = document.querySelector("#endingDate");
       startingDateElt.value = `${today.getFullYear()}-01-01`;
       endingDateElt.value = `${today.getFullYear()}-12-31`;
+
+      let minDate = holidays[0].startingDate.toISOString().substring(0, 10);
+      let maxDate = holidays.slice(-1)[0].endingDate.toISOString().substring(0, 10);
+
+      startingDateElt.max = maxDate;
+      startingDateElt.min = minDate;
+      endingDateElt.max = maxDate;
+      endingDateElt.min = minDate;
+
       const evt = new Event("change");
       startingDateElt.addEventListener("change", changeInterval);
       endingDateElt.addEventListener("change", changeInterval);
@@ -47,7 +78,7 @@ async function initialisation() {
 
 }
 
-function changeInterval() {
+function changeInterval(e) {
   let startingDateElt = document.querySelector("#startingDate");
   let endingDateElt = document.querySelector("#endingDate");
   let startingDate = new Date(startingDateElt.value);
@@ -59,6 +90,7 @@ function changeInterval() {
     if ((holiday.startingDate > startingDate && holiday.startingDate < endingDate) ||
       (holiday.endingDate > startingDate && holiday.endingDate < endingDate)) {
       let newItem = document.createElement('li');
+      newItem.classList.add('list-group-item');
       newItem.innerText = `${holiday.name} du ${holiday.startingDate.toLocaleDateString('fr-FR', format)} au ${holiday.endingDate.toLocaleDateString('fr-FR', format)}`;
       holidayList.appendChild(newItem);
     }
