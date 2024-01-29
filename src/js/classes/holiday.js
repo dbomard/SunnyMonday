@@ -1,4 +1,4 @@
-class Holiday {
+export class Holiday {
 
     #startingDate;
     #endingDate;
@@ -15,7 +15,7 @@ class Holiday {
         this.startingDate = startingDate;
         this.endingDate = endingDate;
     }
-    
+
     get name() {
         return this.#name;
     }
