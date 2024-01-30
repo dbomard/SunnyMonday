@@ -1,7 +1,7 @@
 // import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
 import { Day } from "./classes/day.js";
-import { Holiday } from "./classes/holiday.js"
+import { Holiday } from "./classes/holiday.js";
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
 
@@ -18,8 +18,8 @@ const holidays = new Array();
 
 /**
  * Tri selon la date de début de vacances
- * @param {Holiday} holidayA 
- * @param {Holiday} holidayB 
+ * @param {Holiday} holidayA
+ * @param {Holiday} holidayB
  */
 function sortHolidays(holidayA, holidayB) {
   if (holidayA.startingDate === holidayB.startingDate) {
@@ -33,14 +33,26 @@ function sortHolidays(holidayA, holidayB) {
 
 async function initialisation() {
   // Création des équipes
-  teams[0] = new Team("Verte", [weekTypes.typeA, weekTypes.typeB,
-  weekTypes.typeC, weekTypes.typeD], "#80ff80");
-  teams[1] = new Team("Rouge", [weekTypes.typeB, weekTypes.typeC,
-  weekTypes.typeD, weekTypes.typeA], "#ff8080");
-  teams[2] = new Team("Jaune", [weekTypes.typeC, weekTypes.typeD,
-  weekTypes.typeA, weekTypes.typeB], "#ffff80");
-  teams[3] = new Team("Bleue", [weekTypes.typeD, weekTypes.typeA,
-  weekTypes.typeB, weekTypes.typeC], "#80ffff");
+  teams[0] = new Team(
+    "Verte",
+    [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD],
+    "#80ff80"
+  );
+  teams[1] = new Team(
+    "Rouge",
+    [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA],
+    "#ff8080"
+  );
+  teams[2] = new Team(
+    "Jaune",
+    [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB],
+    "#ffff80"
+  );
+  teams[3] = new Team(
+    "Bleue",
+    [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC],
+    "#80ffff"
+  );
   teams[4] = new Team("Mediathèque", [weekTypes.open]);
 
   // Création de la liste des vacances
@@ -66,7 +78,10 @@ async function initialisation() {
       endingDateElt.value = `${today.getFullYear()}-12-31`;
 
       let minDate = holidays[0].startingDate.toISOString().substring(0, 10);
-      let maxDate = holidays.slice(-1)[0].endingDate.toISOString().substring(0, 10);
+      let maxDate = holidays
+        .slice(-1)[0]
+        .endingDate.toISOString()
+        .substring(0, 10);
 
       startingDateElt.max = maxDate;
       startingDateElt.min = minDate;
@@ -77,8 +92,7 @@ async function initialisation() {
       startingDateElt.addEventListener("change", changeInterval);
       endingDateElt.addEventListener("change", changeInterval);
       startingDateElt.dispatchEvent(evt);
-    })
-
+    });
 }
 
 function changeInterval(e) {
@@ -89,25 +103,43 @@ function changeInterval(e) {
 
   // La date de début est toujours inférieure à la date de fin
   // et la date de fin est toujours supérieure à la date de début
-  if (startingDate > endingDate && e.currentTarget.id === 'startingDate') {
+  if (startingDate > endingDate && e.currentTarget.id === "startingDate") {
     startingDate = new Date(endingDateElt.value);
     startingDateElt.value = endingDateElt.value;
-  } else if (endingDate < startingDate && e.currentTarget.id === 'endingDate') {
+  } else if (endingDate < startingDate && e.currentTarget.id === "endingDate") {
     endingDate = new Date(startingDateElt.value);
     endingDateElt.value = startingDateElt.value;
   }
 
   // Affichage de la liste des vacances scolaires pour l'intervalle de temps
+  /**@type {Array.<Holiday>} currentHolidays */
+  let currentHolidays = [];
   let holidayList = document.querySelector("#holidays");
   holidayList.innerHTML = "";
-  let format = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+  let format = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
   for (let holiday of holidays) {
-    if ((holiday.startingDate > startingDate && holiday.startingDate < endingDate) ||
+    if (
+      (holiday.startingDate > startingDate &&
+        holiday.startingDate < endingDate) ||
       (holiday.endingDate > startingDate && holiday.endingDate < endingDate) ||
-      (startingDate > holiday.startingDate && endingDate < holiday.endingDate)) {
-      let newItem = document.createElement('li');
-      newItem.classList.add('list-group-item');
-      newItem.innerText = `${holiday.name} du ${holiday.startingDate.toLocaleDateString('fr-FR', format)} au ${holiday.endingDate.toLocaleDateString('fr-FR', format)}`;
+      (startingDate > holiday.startingDate && endingDate < holiday.endingDate)
+    ) {
+      // Ajout de la période de vacances pour la période sélectionnée
+      currentHolidays.push(holiday);
+
+      let newItem = document.createElement("li");
+      newItem.classList.add("list-group-item");
+      newItem.innerText = `${
+        holiday.name
+      } du ${holiday.startingDate.toLocaleDateString(
+        "fr-FR",
+        format
+      )} au ${holiday.endingDate.toLocaleDateString("fr-FR", format)}`;
       holidayList.appendChild(newItem);
     }
   }
@@ -178,8 +210,7 @@ function selectTeam(event) {
       let newDay = document.createElement("td");
       if (day.workingDay === true) {
         newDay.classList.add(team.color);
-      }
-      else {
+      } else {
         newDay.classList.add("table-secondary");
       }
       if (week.holidayWeek === true) {
@@ -213,16 +244,20 @@ function updateTeamsSection() {
 }
 
 /**
- * 
+ *
  * @param {Date} startingDate - Date de début
  * @param {Date} endingDate - Date de fin
  */
 function updateTeamObjects(startingDate, endingDate) {
   let oneWeek = 604800000; // nombre de millisecondes en 1 semaine = 7j * 24h *60min * 60s * 1000ms
-  let delta = Math.ceil((dateReference.getTime() - startingDate.getTime()) / oneWeek);
+  let delta = Math.ceil(
+    (dateReference.getTime() - startingDate.getTime()) / oneWeek
+  );
   if (dateReference < startingDate) {
     //dateReference avant date de début
-    delta = Math.floor((startingDate.getTime() - dateReference.getTime()) / oneWeek);
+    delta = Math.floor(
+      (startingDate.getTime() - dateReference.getTime()) / oneWeek
+    );
   }
   console.log(delta);
 }
