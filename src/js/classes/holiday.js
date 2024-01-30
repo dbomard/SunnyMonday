@@ -16,6 +16,10 @@ export class Holiday {
         this.endingDate = endingDate;
     }
 
+    duration() {
+        let duration = this.endingDate
+    }
+
     get name() {
         return this.#name;
     }
