@@ -1,6 +1,8 @@
 export class Holiday {
 
+    /**@type {Date} */
     #startingDate;
+    /**@type {Date} */
     #endingDate;
     #name;
 
@@ -16,9 +18,16 @@ export class Holiday {
         this.endingDate = endingDate;
     }
 
+    /**
+     * @returns {integer} Number of weeks
+     */
     duration() {
-        let duration = this.endingDate
+        let oneWeek = 604800000; // nombre de millisecondes en 1 semaine = 7j * 24h *60min * 60s * 1000ms
+        let duration = Math.floor(this.endingDate.getTime() - this.startingDate.getTime() / oneWeek);
+        return duration;
     }
+
+    
 
     get name() {
         return this.#name;
