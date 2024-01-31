@@ -3,6 +3,7 @@ import { Team } from "./classes/team.js";
 import { Holiday } from "./classes/holiday.js";
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
+import "./dateUtils.js";
 
 // const currentYear = new Year();
 
@@ -10,10 +11,14 @@ import { getHolidays } from "./sockets.js";
 const teams = new Array(5);
 
 /**@type {Date} dateReference - Date de référence pour le calcul des semaines */
-const dateReference = new Date("2024-09-02");
+const dateReference = new Date("2024-09-02T00:00:00Z");
 
 /**@type {Array.<Holiday>} holidays */
 const holidays = new Array();
+
+/**@type {Array.<Holiday>} currentHolidays*/
+const currentHolidays = new Array();
+
 
 /**
  * Tri selon la date de début de vacances
@@ -103,16 +108,15 @@ function changeInterval(e) {
   // La date de début est toujours inférieure à la date de fin
   // et la date de fin est toujours supérieure à la date de début
   if (startingDate > endingDate && e.currentTarget.id === "startingDate") {
-    startingDate = new Date(endingDateElt.value);
+    startingDate = new Date(`${endingDateElt.value}T00:00:00Z`);
     startingDateElt.value = endingDateElt.value;
   } else if (endingDate < startingDate && e.currentTarget.id === "endingDate") {
-    endingDate = new Date(startingDateElt.value);
+    endingDate = new Date(`${startingDateElt.value}T00:00:00Z`);
     endingDateElt.value = startingDateElt.value;
   }
 
   // Affichage de la liste des vacances scolaires pour l'intervalle de temps
   /**@type {Array.<Holiday>} currentHolidays */
-  let currentHolidays = [];
   let holidayList = document.querySelector("#holidays");
   holidayList.innerHTML = "";
   let format = {
@@ -133,12 +137,11 @@ function changeInterval(e) {
 
       let newItem = document.createElement("li");
       newItem.classList.add("list-group-item");
-      newItem.innerText = `${
-        holiday.name
-      } du ${holiday.startingDate.toLocaleDateString(
-        "fr-FR",
-        format
-      )} au ${holiday.endingDate.toLocaleDateString("fr-FR", format)}`;
+      newItem.innerText = `${holiday.name
+        } du ${holiday.startingDate.toLocaleDateString(
+          "fr-FR",
+          format
+        )} au ${holiday.endingDate.toLocaleDateString("fr-FR", format)}`;
       holidayList.appendChild(newItem);
     }
   }
@@ -248,17 +251,23 @@ function updateTeamsSection() {
  * @param {Date} endingDate - Date de fin
  */
 function updateTeamObjects(startingDate, endingDate) {
-  let oneWeek = 604800000; // nombre de millisecondes en 1 semaine = 7j * 24h *60min * 60s * 1000ms
-  let delta = Math.ceil(
-    (dateReference.getTime() - startingDate.getTime()) / oneWeek
-  );
-  if (dateReference < startingDate) {
-    //dateReference avant date de début
-    delta = Math.floor(
-      (startingDate.getTime() - dateReference.getTime()) / oneWeek
-    );
-  }
-  console.log(delta);
+  let weekReference = 0;
+  /**@type {Date} currentDate */
+  let currentDate = dateReference.getCopy();
+  let isHoliday = false;
+  do {
+    currentDate.setHoliday(false);
+    for (let holiday of holidays) {
+      if (holiday.isHoliday(currentDate)) {
+        currentDate.setHoliday();
+      }
+    }
+    if (currentDate < startingDate) {
+      currentDate.addOneDay();
+    } else if (startingDate < currentDate) {
+      currentDate.subOneDay();
+    }
+  } while (!currentDate.equal(startingDate));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
