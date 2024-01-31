@@ -1,5 +1,3 @@
-import { Week } from "./week.js";
-import { weekTypes } from "../week.js";
 import "../dateUtils.js";
 
 export class Team {
