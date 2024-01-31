@@ -1,6 +1,5 @@
 // import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
-import { Day } from "./classes/day.js";
 import { Holiday } from "./classes/holiday.js";
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
