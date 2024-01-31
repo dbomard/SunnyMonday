@@ -27,7 +27,14 @@ export class Holiday {
         return duration;
     }
 
-    
+    /**
+     * 
+     * @param {Date} date - Date to test
+     * @returns {boolean} true if the date belongs to these holidays
+     */
+    isHoliday(date) {
+        return (date > this.startingDate && date < this.endingDate);
+    }
 
     get name() {
         return this.#name;
