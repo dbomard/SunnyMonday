@@ -17,7 +17,7 @@ Date.prototype.getWeek = function () {
       ((date.getTime() - week1.getTime()) / 86400000 -
         3 +
         ((week1.getDay() + 6) % 7)) /
-        7
+      7
     )
   );
 };
@@ -37,11 +37,25 @@ Date.prototype.addDays = function (daysCount) {
 };
 
 /**
+ * 
+ * @param {integer} daysCount - Nombre de jours à soustraire
+ * @returns {Date} New Date object
+ */
+Date.prototype.subDays = function (daysCount) {
+  const newDate = new Date(
+    this.getFullYear(),
+    this.getMonth(),
+    this.getDate() - daysCount
+  );
+  return newDate;
+}
+
+/**
  *
  * @returns {Date} A new Date objet that is a copy of current date
  */
 Date.prototype.getCopy = function () {
-  return new Date(this.getTime);
+  return new Date(this.getTime());
 };
 
 /**
