@@ -50,12 +50,34 @@ Date.prototype.subDays = function (daysCount) {
   return newDate;
 }
 
+Date.prototype.equal = function (date) {
+  return (
+    this.getDate() === date.getDate() &&
+    this.getMonth() === date.getMonth() &&
+    this.getFullYear() === date.getFullYear()
+  );
+}
+
+/**
+ * Incrémente d'un jour
+ */
+Date.prototype.addOneDay = function () {
+  this.setDate(this.getDate() + 1);
+}
+
+/**
+ * Décrémente d'un jour
+ */
+Date.prototype.subOneDay = function () {
+  this.setDate(this.getDate() - 1);
+}
+
 /**
  *
  * @returns {Date} A new Date objet that is a copy of current date
  */
 Date.prototype.getCopy = function () {
-  return new Date(this.getTime());
+  return new Date(this.toISOString());
 };
 
 /**
