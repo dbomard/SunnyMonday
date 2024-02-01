@@ -258,6 +258,8 @@ function updateTeamObjects(startingDate, endingDate) {
   let weekReference = 0;
   /**@type {Date} currentDate */
   let currentDate = dateReference.getCopy();
+
+  // Recherche du type de semaine de la startingDate
   if (!currentDate.equal(startingDate)) {
     do {
       if (currentDate < startingDate) {
@@ -290,6 +292,18 @@ function updateTeamObjects(startingDate, endingDate) {
     weekReference = 4 + weekReference;
   }
   console.log(`Semaine de référence : ${weekReference}`);
+
+  currentDate = startingDate.getCopy();
+  do {
+    currentDate.addOneDay();
+    for (let holiday of holidays) {
+      if (holiday.isHoliday(currentDate)) {
+        currentDate.setHoliday();
+        console.log(currentDate.toDateString());
+      }
+    }
+
+  } while (!currentDate.equal(endingDate));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
