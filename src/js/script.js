@@ -12,6 +12,7 @@ const teams = new Array(5);
 
 /**@type {Date} dateReference - Date de référence pour le calcul des semaines */
 const dateReference = new Date("2024-09-02T00:00:00Z");
+dateReference.setHours(0, 0, 0, 0);
 
 /**@type {Array.<Holiday>} holidays */
 const holidays = new Array();
@@ -254,8 +255,7 @@ function updateTeamObjects(startingDate, endingDate) {
   let weekReference = 0;
   /**@type {Date} currentDate */
   let currentDate = dateReference.getCopy();
-  let isHoliday = false;
-  do {
+  while (!currentDate.equal(startingDate)) {
     currentDate.setHoliday(false);
     for (let holiday of holidays) {
       if (holiday.isHoliday(currentDate)) {
@@ -264,10 +264,22 @@ function updateTeamObjects(startingDate, endingDate) {
     }
     if (currentDate < startingDate) {
       currentDate.addOneDay();
+      if (currentDate.getDay() === 1 && !currentDate.holiday) {
+        weekReference++;
+        //TODO: Corriger mauvaise incrémentation
+      }
     } else if (startingDate < currentDate) {
       currentDate.subOneDay();
+      if (currentDate.getDay() === 6 && !currentDate.holiday) {
+        weekReference--;
+      }
     }
-  } while (!currentDate.equal(startingDate));
+  };
+  weekReference = weekReference % 4;
+  if (weekReference < 0) {
+    weekReference = 4 + weekReference;
+  }
+  console.log(`Semaine de référence : ${weekReference}`);
 }
 
 document.addEventListener("DOMContentLoaded", () => {

@@ -33,7 +33,8 @@ export class Holiday {
      * @returns {boolean} true if the date belongs to these holidays
      */
     isHoliday(date) {
-        return (date > this.startingDate && date < this.endingDate);
+        date.setHours(0, 0, 0, 0);
+        return (date > this.startingDate.addDays(1) && date < this.endingDate);
     }
 
     get name() {
@@ -53,6 +54,7 @@ export class Holiday {
             throw new TypeError();
         }
         this.#startingDate = date;
+        this.#startingDate.setHours(0, 0, 0, 0);
     }
     get endingDate() {
         return this.#endingDate;
@@ -62,5 +64,6 @@ export class Holiday {
             throw new TypeError();
         }
         this.#endingDate = date;
+        this.#endingDate.setHours(0, 0, 0, 0);
     }
 }
