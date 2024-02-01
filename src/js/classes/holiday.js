@@ -15,7 +15,9 @@ export class Holiday {
     constructor(name, startingDate, endingDate) {
         this.#name = name;
         this.startingDate = startingDate;
+        this.startingDate.setHours(0, 0, 0, 0);
         this.endingDate = endingDate;
+        this.endingDate.setHours(0, 0, 0, 0);
     }
 
     /**

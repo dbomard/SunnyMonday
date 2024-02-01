@@ -77,6 +77,7 @@ async function initialisation() {
     })
     .then(() => {
       let today = new Date();
+      today.setHours(0, 0, 0, 0);
       let startingDateElt = document.querySelector("#startingDate");
       let endingDateElt = document.querySelector("#endingDate");
       startingDateElt.value = `${today.getFullYear()}-01-01`;
@@ -104,7 +105,9 @@ function changeInterval(e) {
   let startingDateElt = document.querySelector("#startingDate");
   let endingDateElt = document.querySelector("#endingDate");
   let startingDate = new Date(startingDateElt.value);
+  startingDate.setHours(0, 0, 0, 0);
   let endingDate = new Date(endingDateElt.value);
+  endingDate.setHours(0, 0, 0, 0)
 
   // La date de début est toujours inférieure à la date de fin
   // et la date de fin est toujours supérieure à la date de début
@@ -255,26 +258,33 @@ function updateTeamObjects(startingDate, endingDate) {
   let weekReference = 0;
   /**@type {Date} currentDate */
   let currentDate = dateReference.getCopy();
-  while (!currentDate.equal(startingDate)) {
-    currentDate.setHoliday(false);
-    for (let holiday of holidays) {
-      if (holiday.isHoliday(currentDate)) {
-        currentDate.setHoliday();
+  if (!currentDate.equal(startingDate)) {
+    do {
+      if (currentDate < startingDate) {
+        currentDate.addOneDay();
+        currentDate.setHoliday(false);
+        for (let holiday of holidays) {
+          if (holiday.isHoliday(currentDate)) {
+            currentDate.setHoliday();
+          }
+        }
+        if (currentDate.getDay() === 1 && currentDate.holiday !== undefined && !currentDate.holiday) {
+          weekReference++;
+        }
+      } else if (startingDate < currentDate) {
+        currentDate.subOneDay();
+        currentDate.setHoliday(false);
+        for (let holiday of holidays) {
+          if (holiday.isHoliday(currentDate)) {
+            currentDate.setHoliday();
+          }
+        }
+        if (currentDate.getDay() === 6 && currentDate.holiday !== undefined && !currentDate.holiday) {
+          weekReference--;
+        }
       }
-    }
-    if (currentDate < startingDate) {
-      currentDate.addOneDay();
-      if (currentDate.getDay() === 1 && !currentDate.holiday) {
-        weekReference++;
-        //TODO: Corriger mauvaise incrémentation
-      }
-    } else if (startingDate < currentDate) {
-      currentDate.subOneDay();
-      if (currentDate.getDay() === 6 && !currentDate.holiday) {
-        weekReference--;
-      }
-    }
-  };
+    } while (!currentDate.equal(startingDate));
+  }
   weekReference = weekReference % 4;
   if (weekReference < 0) {
     weekReference = 4 + weekReference;

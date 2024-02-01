@@ -33,6 +33,7 @@ Date.prototype.addDays = function (daysCount) {
     this.getMonth(),
     this.getDate() + daysCount
   );
+  newDate.setHours(0,0,0,0);
   return newDate;
 };
 
@@ -57,6 +58,8 @@ Date.prototype.equal = function (date) {
     this.getFullYear() === date.getFullYear()
   );
 }
+
+
 
 /**
  * Incrémente d'un jour
