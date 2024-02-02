@@ -238,12 +238,12 @@ function updateTeamsSection() {
     newRow.style.backgroundColor = team.color;
     newRow.innerHTML = `
     <td>${team.name}</td>
-      <td class="spinner">${team.workingDaysCount}</td>
-      <td class="spinner">${team.workingDaysCount * 7}</td>
-      <td class="spinner">${team.oneDayWeekends}</td>
-      <td class="spinner">${team.saturdaySundayWeekends}</td>
-      <td class="spinner">${team.sundayMondayWeekends}</td>
-      <td class="spinner">${team.threeDaysWeekends}</td>`;
+      <td class="spinner">${team.workingDaysCount()}</td>
+      <td class="spinner">${team.workingDaysCount() * 7}</td>
+      <td class="spinner">${team.oneDayWeekends()}</td>
+      <td class="spinner">${team.saturdaySundayWeekends()}</td>
+      <td class="spinner">${team.sundayMondayWeekends()}</td>
+      <td class="spinner">${team.threeDaysWeekends()}</td>`;
     table.appendChild(newRow);
     newRow.addEventListener("click", selectTeam);
   });
@@ -305,6 +305,7 @@ function updateTeamObjects(startingDate, endingDate) {
         currentDate.setHoliday();
       }
     }
+    // TODO: ajouter les jours fériés
     if (currentDate.getDay() === 1 && !currentDate.holiday && !currentDate.equal(dateReference)) {
       weekIndex++;
       // console.log("Nouvelle semaine");
