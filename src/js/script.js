@@ -264,7 +264,6 @@ function updateTeamObjects(startingDate, endingDate) {
     do {
       if (currentDate < startingDate) {
         currentDate.addOneDay();
-        currentDate.setHoliday(false);
         for (let holiday of holidays) {
           if (holiday.isHoliday(currentDate)) {
             currentDate.setHoliday();
@@ -287,23 +286,36 @@ function updateTeamObjects(startingDate, endingDate) {
       }
     } while (!currentDate.equal(startingDate));
   }
-  weekReference = weekReference % 4;
+  let weekIndex = weekReference % 4;
   if (weekReference < 0) {
-    weekReference = 4 + weekReference;
+    weekIndex = 4 + weekIndex;
   }
   console.log(`Semaine de référence : ${weekReference}`);
 
+  for (let team of teams) {
+    team.resetDays();
+  }
+
   currentDate = startingDate.getCopy();
+  let lastDate = endingDate.addDays(1);
   do {
-    currentDate.addOneDay();
+    currentDate.setHoliday(false);
     for (let holiday of holidays) {
       if (holiday.isHoliday(currentDate)) {
         currentDate.setHoliday();
-        console.log(currentDate.toDateString());
       }
     }
-
-  } while (!currentDate.equal(endingDate));
+    if (currentDate.getDay() === 1 && !currentDate.holiday && !currentDate.equal(dateReference)) {
+      weekIndex++;
+      // console.log("Nouvelle semaine");
+      console.log("Référence : " + weekIndex);
+      console.log("Jour : " + currentDate);
+    }
+    for (let team of teams) {
+      team.addDay(currentDate, weekIndex);
+    }
+    currentDate.addOneDay();
+  } while (!currentDate.equal(lastDate));
 }
 
 document.addEventListener("DOMContentLoaded", () => {
