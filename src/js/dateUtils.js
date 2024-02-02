@@ -33,7 +33,7 @@ Date.prototype.addDays = function (daysCount) {
     this.getMonth(),
     this.getDate() + daysCount
   );
-  newDate.setHours(0,0,0,0);
+  newDate.setHours(0, 0, 0, 0);
   return newDate;
 };
 
@@ -80,7 +80,9 @@ Date.prototype.subOneDay = function () {
  * @returns {Date} A new Date objet that is a copy of current date
  */
 Date.prototype.getCopy = function () {
-  return new Date(this.toISOString());
+  const newDate = new Date(this.toISOString());
+  newDate.holiday = this.holiday;
+  return newDate;
 };
 
 /**

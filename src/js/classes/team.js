@@ -26,6 +26,10 @@ export class Team {
 
   addDay(date, patternIndex) {
     let newDay = date.getCopy();
+    if (!newDay.holiday) {
+      let index = patternIndex % this.#pattern.lenght;
+      let week = this.#pattern[index];
+    }
     this.#days.push(newDay);
   }
 
