@@ -36,7 +36,7 @@ export class Holiday {
      */
     isHoliday(date) {
         date.setHours(0, 0, 0, 0);
-        return (date > this.startingDate.addDays(1) && date < this.endingDate);
+        return (date > this.startingDate && date < this.endingDate);
     }
 
     get name() {
