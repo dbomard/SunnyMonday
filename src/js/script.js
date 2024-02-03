@@ -391,10 +391,16 @@ function updateTeamObjects(startingDate, endingDate) {
     currentDate.setHoliday(false);
     for (let holiday of holidays) {
       if (holiday.isHoliday(currentDate)) {
-        currentDate.setHoliday();
+        currentDate.setHoliday(true);
       }
     }
     // TODO: ajouter les jours fériés
+    currentDate.setPublicDay(false);
+    for (let publicDay of publicDays) {
+      if (currentDate.equal(publicDay)) {
+        currentDate.setPublicDay(true);
+      }
+    }
     if (currentDate.getDay() === 1 && !currentDate.holiday && !currentDate.equal(dateReference)) {
       weekIndex++;
       // console.log("Nouvelle semaine");
