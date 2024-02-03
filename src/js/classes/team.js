@@ -50,7 +50,7 @@ export class Team {
   workingDaysCount() {
     let count = 0;
     for (let day of this.#days) {
-      if (!day.getWeekend()) {
+      if (!day.getWeekend() && !day.getPublicDay()) {
         count++;
       }
     }
