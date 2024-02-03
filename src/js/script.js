@@ -20,6 +20,9 @@ const holidays = new Array();
 /**@type {Array.<Holiday>} currentHolidays*/
 const currentHolidays = new Array();
 
+/**@type {Array.<Date>} publicDays */
+const publicDays = new Array();
+
 
 /**
  * Tri selon la date de début de vacances
@@ -34,6 +37,87 @@ function sortHolidays(holidayA, holidayB) {
     return -1;
   }
   return 1;
+}
+
+/**
+  * @returns Date de Pâques
+  */
+function getEasterDate(year) {
+  let B = 19 * (year % 19) + 24;
+  let M = B % 30;
+  let C = 2 * (year % 4) + 4 * (year % 7) + 6 * M + 5;
+  let N = C % 7;
+  let P = M + N;
+  let easter = `${year}-03-${P + 22}`;
+  if (P > 9) {
+    easter = `${year}-04-${P - 9}`;
+  }
+  return new Date(easter);
+}
+
+/**
+ * Calcul les jours fériés
+ */
+function computePublicHolidays(year) {
+  let day = new Date(`${year}-01-01`);
+  day.publicDay = true;
+  day.name = "1er janvier"
+  publicDays.push(day);
+
+  let easter = getEasterDate(year);
+  easter.publicDay = true;
+  easter.name = "Pâques";
+  publicDays.push(easter);
+
+  day = easter.addDays(1)
+  day.publicDay = true
+  day.name = "Lundi de Pâques"
+  publicDays.push(day);
+
+  day = new Date(`${year}-05-01`)
+  day.publicDay = true
+  day.name = "Fête du travail"
+  publicDays.push(day);
+
+  day = easter.addDays(39)
+  day.publicDay = true
+  day.name = "Ascension"
+  publicDays.push(day);
+
+  day = easter.addDays(49)
+  day.publicDay = true
+  day.name = "Pentecôte"
+  publicDays.push(day);
+
+  day = easter.addDays(50)
+  day.publicDay = true
+  day.name = "Lundi de Pentecôte"
+  publicDays.push(day);
+
+  day = new Date(`${year}-07-14`)
+  day.publicDay = true
+  day.name = "Fête Nationale"
+  publicDays.push(day);
+
+  day = new Date(`${year}-08-15`)
+  day.publicDay = true
+  day.name = "Assomption"
+  publicDays.push(day);
+
+  day = new Date(`${year}-11-01`)
+  day.publicDay = true
+  day.name = "Toussaint"
+  publicDays.push(day);
+
+  day = new Date(`${year}-11-11`)
+  day.publicDay = true
+  day.name = "Armistice 1918"
+  publicDays.push(day);
+
+  day = new Date(`${year}-12-25`)
+  day.publicDay = true
+  day.name = "Noël"
+  publicDays.push(day);
 }
 
 async function initialisation() {
@@ -98,6 +182,11 @@ async function initialisation() {
       startingDateElt.addEventListener("change", changeInterval);
       endingDateElt.addEventListener("change", changeInterval);
       startingDateElt.dispatchEvent(evt);
+
+      // Jours fériés
+      for (let year = parseInt(minDate.substring(0, 4)); year <= parseInt(maxDate.substring(0, 4)); year++) {
+        computePublicHolidays(year);
+      }
     });
 }
 
