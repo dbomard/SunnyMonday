@@ -82,6 +82,8 @@ Date.prototype.subOneDay = function () {
 Date.prototype.getCopy = function () {
   const newDate = new Date(this.toISOString());
   newDate.holiday = this.holiday;
+  newDate.publicDay = this.publicDay;
+  newDate.weekend = this.weekend;
   return newDate;
 };
 
