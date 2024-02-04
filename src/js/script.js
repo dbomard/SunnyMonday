@@ -353,12 +353,13 @@ function updateTeamObjects(startingDate, endingDate) {
     do {
       if (currentDate < startingDate) {
         currentDate.addOneDay();
+        currentDate.setHoliday(false);
         for (let holiday of holidays) {
           if (holiday.isHoliday(currentDate)) {
             currentDate.setHoliday();
           }
         }
-        if (currentDate.getDay() === 1 && currentDate.holiday !== undefined && !currentDate.holiday) {
+        if (currentDate.getDay() === 1 && currentDate !== dateReference && !currentDate.holiday) {
           weekReference++;
         }
       } else if (startingDate < currentDate) {
@@ -369,7 +370,7 @@ function updateTeamObjects(startingDate, endingDate) {
             currentDate.setHoliday();
           }
         }
-        if (currentDate.getDay() === 6 && currentDate.holiday !== undefined && !currentDate.holiday) {
+        if (currentDate.getDay() === 6 && currentDate !== dateReference && !currentDate.holiday) {
           weekReference--;
         }
       }
@@ -404,8 +405,8 @@ function updateTeamObjects(startingDate, endingDate) {
     if (currentDate.getDay() === 1 && !currentDate.holiday && !currentDate.equal(dateReference)) {
       weekIndex++;
       // console.log("Nouvelle semaine");
-      console.log("Référence : " + weekIndex);
-      console.log("Jour : " + currentDate);
+      // console.log("Référence : " + weekIndex);
+      // console.log("Jour : " + currentDate);
     }
     for (let team of teams) {
       team.addDay(currentDate, weekIndex);
