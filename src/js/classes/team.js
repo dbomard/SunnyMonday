@@ -65,13 +65,13 @@ export class Team {
     for (let day of this.#days) {
       switch (day.getDay()) {
         case 6:
-          saturday = day.getWeekend();
+          saturday = day.getWeekend() && !day.getPublicDay() && !day.getHoliday();
           break;
         case 0:
-          sunday = day.getWeekend();
+          sunday = day.getWeekend() && !day.getPublicDay() && !day.getHoliday();
           break;
         case 1:
-          monday = day.getWeekend();
+          monday = day.getWeekend() && !day.getPublicDay() && !day.getHoliday();
           if (saturday === sat && sunday === sun && monday === mon) {
             count++;
           }
