@@ -39,7 +39,7 @@ export class Team {
       let dayName = days[newDay.getDay()];
       let working = week[dayName];
       newDay.setWeekend(!working);
-      console.log(`${newDay.toLocaleDateString()} : ${newDay.getWeekend()}`);
+      // console.log(`${newDay.toLocaleDateString()} : ${newDay.getWeekend()}`);
     } else {
       newDay.setWeekend(newDay.getDay() === 0 || newDay.getDay() === 1);
     }
@@ -54,24 +54,50 @@ export class Team {
         count++;
       }
     }
-    count -= 25;
+    return count;
+  }
+
+  countWeekends(sat, sun, mon) {
+    let count = 0;
+    let saturday = false;
+    let sunday = false;
+    let monday = false;
+    for (let day of this.#days) {
+      switch (day.getDay()) {
+        case 6:
+          saturday = day.getWeekend();
+          break;
+        case 0:
+          sunday = day.getWeekend();
+          break;
+        case 1:
+          monday = day.getWeekend();
+          if (saturday === sat && sunday === sun && monday === mon) {
+            count++;
+          }
+          saturday = false;
+          sunday = false;
+          monday = false;
+          break;
+      }
+    }
     return count;
   }
 
   oneDayWeekends() {
-    return 1;
+    return this.countWeekends(false, true, false);
   }
 
   saturdaySundayWeekends() {
-    return 2;
+    return this.countWeekends(true, true, false);
   }
 
   sundayMondayWeekends() {
-    return 2;
+    return this.countWeekends(false, true, true);
   }
 
   threeDaysWeekends() {
-    return 3;
+    return this.countWeekends(true, true, true);
   }
 
   get days() {
