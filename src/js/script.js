@@ -252,20 +252,6 @@ function resetCalendar() {
 }
 
 function selectTeam(event) {
-  let monthNames = [
-    "janvier",
-    "février",
-    "mars",
-    "avril",
-    "mai",
-    "juin",
-    "juillet",
-    "août",
-    "septembre",
-    "octobre",
-    "novembre",
-    "décembre",
-  ];
   let dayNames = ["D", "L", "M", "M", "J", "V", "S"];
 
   // Faire disparaître l'instruction de cliquer sur une équipe
@@ -293,7 +279,6 @@ function selectTeam(event) {
     headingRow.appendChild(day);
   }
 
-
   let tableBody = calendar.querySelector("tbody");
   let currentMonth = -1;
   let currentYear = -1;
@@ -301,6 +286,7 @@ function selectTeam(event) {
   for (let day of team.days) {
     if (day.getMonth() !== currentMonth) {
       if (currentRaw !== undefined) {
+        // Ajout du mois précédent au tableau si défini
         tableBody.appendChild(currentRaw);
       }
       // Changement de mois
@@ -317,10 +303,21 @@ function selectTeam(event) {
       }
 
       thElt = document.createElement("th");
-      thElt.innerText = monthNames[day.getMonth()];
+      thElt.innerText = day.toLocaleDateString("fr-FR", { month: 'long' });
+
       currentRaw.appendChild(thElt);
+      // Ajout d'un espace si on ne commence pas au 1er du mois
+      if (day.getDate() !== 1) {
+        let tdElt = document.createElement('td');
+        tdElt.colSpan = day.getDate() - 1;
+        currentRaw.appendChild(tdElt);
+      }
     }
+    let tdElt = document.createElement("td");
+    tdElt.innerText = day.toLocaleDateString("fr-FR", { weekday: 'narrow' });
+    currentRaw.appendChild(tdElt);
   }
+  // Ajout du dernier mois
   if (currentRaw !== undefined) {
     tableBody.appendChild(currentRaw);
   }
@@ -404,7 +401,6 @@ function updateTeamObjects(startingDate, endingDate) {
         currentDate.setHoliday(true);
       }
     }
-    // TODO: ajouter les jours fériés
     currentDate.setPublicDay(false);
     for (let publicDay of publicDays) {
       if (currentDate.equal(publicDay)) {
