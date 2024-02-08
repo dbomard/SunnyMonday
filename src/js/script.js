@@ -267,17 +267,24 @@ function selectTeam(event) {
     "décembre",
   ];
   let dayNames = ["D", "L", "M", "M", "J", "V", "S"];
-  let text = document.querySelector("#team-detail p");
-  text.classList.add("hidden");
+
+  // Faire disparaître l'instruction de cliquer sur une équipe
+  let instructions = document.querySelector("#team-detail p");
+  instructions.classList.add("hidden");
+
+  // Récupération de l'index de l'équipe
   let teamIndex = event.currentTarget.id.substring(4);
   let team = teams[teamIndex];
   console.log("Equipe cliquée: " + teamIndex);
+
+  // RAZ zone du calendrier
   let calendar = document.querySelector("#calendar");
   calendar.innerHTML = "";
+
+  // Ajout du template de calendrier
   let calendarTemplate = document.getElementById("calendar-template");
   let clonedCalendarTemplate = calendarTemplate.content.cloneNode(true);
   calendar.appendChild(clonedCalendarTemplate);
-
   let headingRow = calendar.querySelector("thead tr");
   for (let i = 1; i <= 31; i++) {
     let day = document.createElement("th");
@@ -285,35 +292,37 @@ function selectTeam(event) {
     day.classList.add("table-dark");
     headingRow.appendChild(day);
   }
+
+
   let tableBody = calendar.querySelector("tbody");
   let currentMonth = -1;
-  let currentRaw = null;
-  for (let week of team.weeks.values()) {
-    /**@type {Day} day */
-    let day;
-    for (day of week.days.values()) {
-      if (day.date.getMonth() !== currentMonth) {
-        currentMonth++;
-        currentRaw = document.createElement("tr");
-        let newHeader = document.createElement("th");
-        newHeader.innerText = monthNames[currentMonth];
-        newHeader.classList.add("table-dark");
-        currentRaw.appendChild(newHeader);
+  let currentYear = -1;
+  let currentRaw = undefined;
+  for (let day of team.days) {
+    if (day.getMonth() !== currentMonth) {
+      if (currentRaw !== undefined) {
         tableBody.appendChild(currentRaw);
       }
-      let name = dayNames[day.date.getDay()];
-      let newDay = document.createElement("td");
-      if (day.workingDay === true) {
-        newDay.classList.add(team.color);
-      } else {
-        newDay.classList.add("table-secondary");
+      // Changement de mois
+      currentMonth = day.getMonth();
+      currentRaw = document.createElement("tr");
+
+      let thElt = document.createElement('th');
+      if (day.getFullYear() !== currentYear) {
+        thElt.rowSpan = `${12 - day.getMonth()}`;
+        // Changement d'année
+        currentYear = day.getFullYear();
+        thElt.innerText = currentYear;
+        currentRaw.appendChild(thElt);
       }
-      if (week.holidayWeek === true) {
-        newDay.classList.add("holiday");
-      }
-      newDay.innerText = name;
-      currentRaw.appendChild(newDay);
+
+      thElt = document.createElement("th");
+      thElt.innerText = monthNames[day.getMonth()];
+      currentRaw.appendChild(thElt);
     }
+  }
+  if (currentRaw !== undefined) {
+    tableBody.appendChild(currentRaw);
   }
 }
 
