@@ -100,14 +100,23 @@ export class Team {
     return this.countWeekends(true, true, true);
   }
 
+  /**
+   * @returns {Date}
+   */
   get days() {
     return this.#days;
   }
 
+  /**
+   * @returns {string}
+   */
   get name() {
     return this.#name;
   }
 
+  /**
+   * @returns {string}
+   */
   get color() {
     return this.#color;
   }
