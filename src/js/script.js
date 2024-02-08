@@ -1,9 +1,9 @@
-// import { Year } from "./classes/year.js";
 import { Team } from "./classes/team.js";
 import { Holiday } from "./classes/holiday.js";
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
 import "./dateUtils.js";
+import "./colorUtils.js";
 
 // const currentYear = new Year();
 
@@ -315,11 +315,23 @@ function selectTeam(event) {
     }
     let tdElt = document.createElement("td");
     tdElt.innerText = day.toLocaleDateString("fr-FR", { weekday: 'narrow' });
+    if (day.getHoliday()) {
+      tdElt.classList.add('holiday');
+    }
+    if (day.getWeekend()) {
+      tdElt.style.backgroundColor = "#CCCCCC";
+    } else {
+      tdElt.style.backgroundColor = team.color;
+    }
+    if (day.getPublicDay()) {
+      tdElt.style.backgroundColor = "#FFCCCC";
+    }
     currentRaw.appendChild(tdElt);
-  }
-  // Ajout du dernier mois
-  if (currentRaw !== undefined) {
-    tableBody.appendChild(currentRaw);
+
+    // Ajout du dernier mois
+    if (currentRaw !== undefined) {
+      tableBody.appendChild(currentRaw);
+    }
   }
 }
 
