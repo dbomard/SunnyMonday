@@ -223,6 +223,17 @@ function changeInterval(e) {
     endingDateElt.value = startingDateElt.value;
   }
 
+  // La date de début est toujours supérieure à la date des premières vacances
+  // et la date de fin est toujours supérieure à la date des dernières vacances
+  if (startingDate < holidays[0].startingDate) {
+    startingDate = holidays[0].startingDate.getCopy();
+    startingDateElt.value = startingDate.toISOString().substring(0, 10);
+  }
+  if (endingDate > holidays.slice(-1).endingDate) {
+    endingDate = holidays.slice(-1).endingDate.getCopy();
+    endingDateElt.value = endingDate.toISOString().substring(0, 10);
+  }
+
   // Affichage de la liste des vacances scolaires pour l'intervalle de temps
   /**@type {Array.<Holiday>} currentHolidays */
   let holidayList = document.querySelector("#holidays");
