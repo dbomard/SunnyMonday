@@ -123,25 +123,25 @@ function computePublicHolidays(year) {
 
 async function initialisation() {
   // Création des équipes
-  let color = new Color("#80ff80");
+  let color = new Color("#B3ffB3");
   teams[0] = new Team(
     "Verte",
     [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD],
     color
   );
-  color = new Color("#ff8080");
+  color = new Color("#ffB3B3");
   teams[1] = new Team(
     "Rouge",
     [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA],
     color
   );
-  color = new Color("#ffff80");
+  color = new Color("#ffffB3");
   teams[2] = new Team(
     "Jaune",
     [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB],
     color
   );
-  color = new Color("#80ffff");
+  color = new Color("#B3ffff");
   teams[3] = new Team(
     "Bleue",
     [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC],
@@ -287,6 +287,7 @@ function selectTeam(event) {
   let currentMonth = -1;
   let currentYear = -1;
   let currentRaw = undefined;
+  let colorHsl = team.color.getHsl();
   for (let day of team.days) {
     if (day.getMonth() !== currentMonth) {
       if (currentRaw !== undefined) {
@@ -323,12 +324,14 @@ function selectTeam(event) {
       tdElt.classList.add('holiday');
     }
     if (day.getWeekend()) {
-      tdElt.style.backgroundColor = "#EEEEEE";
+      tdElt.style.backgroundColor = `hsl(${colorHsl.h}, ${Math.round(colorHsl.s / 2)}%, ${Math.round(colorHsl.l / 1.3)}%)`;
     } else {
       tdElt.style.backgroundColor = team.color.getHex();
     }
     if (day.getPublicDay()) {
-      tdElt.style.backgroundColor = "#FF0000";
+      tdElt.style.backgroundColor = `hsl(${colorHsl.h}, ${Math.round(colorHsl.s / 2)}%, ${Math.round(colorHsl.l / 2)}%)`;
+      tdElt.style.color = `hsl(${colorHsl.h}, ${colorHsl.s}%, 90%)`;
+
       tdElt.title = day.getPublicDayName();
     }
     currentRaw.appendChild(tdElt);
