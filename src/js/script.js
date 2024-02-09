@@ -361,7 +361,8 @@ function updateTeamsSection() {
     newRow.id = `team${index}`;
     newRow.style.backgroundColor = team.color.getHex();
     newRow.innerHTML = `
-    <td>${team.name}</td>
+      <td><input class="form-check-input" type="checkbox" value="" id="team${team.name}" /></td>
+      <td>${team.name}</td>
       <td class="spinner">${team.workingDaysCount()}</td>
       <td class="spinner">${team.workingDaysCount() * 7}</td>
       <td class="spinner">${team.oneDayWeekends()}</td>
