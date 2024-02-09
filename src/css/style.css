@@ -28,3 +28,8 @@
     max-height: 9em;
     overflow: auto;
 }
+
+#calendar {
+    max-height: 70vh;
+    overflow: auto;
+}
