@@ -59,8 +59,6 @@ Date.prototype.equal = function (date) {
   );
 }
 
-
-
 /**
  * Incrémente d'un jour
  */
@@ -84,6 +82,7 @@ Date.prototype.getCopy = function () {
   newDate.holiday = this.holiday;
   newDate.publicDay = this.publicDay;
   newDate.weekend = this.weekend;
+  newDate.publicDayName = this.publicDayName;
   return newDate;
 };
 
@@ -137,3 +136,11 @@ Date.prototype.getPublicDay = function () {
   }
   return true;
 };
+
+Date.prototype.setPublicDayName = function (name) {
+  this.publicDayName = name;
+}
+
+Date.prototype.getPublicDayName = function () {
+  return this.publicDayName;
+}

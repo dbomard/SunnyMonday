@@ -2,6 +2,7 @@ import { Team } from "./classes/team.js";
 import { Holiday } from "./classes/holiday.js";
 import { weekTypes } from "./week.js";
 import { getHolidays } from "./sockets.js";
+import { Color } from "./classes/color.js";
 import "./dateUtils.js";
 import "./colorUtils.js";
 
@@ -61,86 +62,90 @@ function getEasterDate(year) {
 function computePublicHolidays(year) {
   let day = new Date(`${year}-01-01`);
   day.publicDay = true;
-  day.name = "1er janvier"
+  day.setPublicDayName("1er janvier");
   publicDays.push(day);
 
   let easter = getEasterDate(year);
   easter.publicDay = true;
-  easter.name = "Pâques";
+  easter.setPublicDayName("Pâques");
   publicDays.push(easter);
 
   day = easter.addDays(1)
-  day.publicDay = true
-  day.name = "Lundi de Pâques"
+  day.publicDay = true;
+  day.setPublicDayName("Lundi de Pâques");
   publicDays.push(day);
 
   day = new Date(`${year}-05-01`)
-  day.publicDay = true
-  day.name = "Fête du travail"
+  day.publicDay = true;
+  day.setPublicDayName("Fête du travail");
   publicDays.push(day);
 
   day = easter.addDays(39)
-  day.publicDay = true
-  day.name = "Ascension"
+  day.publicDay = true;
+  day.setPublicDayName("Ascension");
   publicDays.push(day);
 
   day = easter.addDays(49)
-  day.publicDay = true
-  day.name = "Pentecôte"
+  day.publicDay = true;
+  day.setPublicDayName("Pentecôte");
   publicDays.push(day);
 
   day = easter.addDays(50)
-  day.publicDay = true
-  day.name = "Lundi de Pentecôte"
+  day.publicDay = true;
+  day.setPublicDayName("Lundi de Pentecôte");
   publicDays.push(day);
 
   day = new Date(`${year}-07-14`)
-  day.publicDay = true
-  day.name = "Fête Nationale"
+  day.publicDay = true;
+  day.setPublicDayName("Fête Nationale");
   publicDays.push(day);
 
   day = new Date(`${year}-08-15`)
-  day.publicDay = true
-  day.name = "Assomption"
+  day.publicDay = true;
+  day.setPublicDayName("Assomption");
   publicDays.push(day);
 
   day = new Date(`${year}-11-01`)
-  day.publicDay = true
-  day.name = "Toussaint"
+  day.publicDay = true;
+  day.setPublicDayName("Toussaint");
   publicDays.push(day);
 
   day = new Date(`${year}-11-11`)
-  day.publicDay = true
-  day.name = "Armistice 1918"
+  day.publicDay = true;
+  day.setPublicDayName("Armistice 1918");
   publicDays.push(day);
 
   day = new Date(`${year}-12-25`)
-  day.publicDay = true
-  day.name = "Noël"
+  day.publicDay = true;
+  day.setPublicDayName("Noël");
   publicDays.push(day);
 }
 
 async function initialisation() {
   // Création des équipes
+  let color = new Color("#80ff80");
   teams[0] = new Team(
     "Verte",
     [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD],
-    "#80ff80"
+    color
   );
+  color = new Color("#ff8080");
   teams[1] = new Team(
     "Rouge",
     [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA],
-    "#ff8080"
+    color
   );
+  color = new Color("#ffff80");
   teams[2] = new Team(
     "Jaune",
     [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB],
-    "#ffff80"
+    color
   );
+  color = new Color("#80ffff");
   teams[3] = new Team(
     "Bleue",
     [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC],
-    "#80ffff"
+    color
   );
   teams[4] = new Team("Mediathèque", [weekTypes.open]);
 
@@ -158,6 +163,7 @@ async function initialisation() {
         }
       }
       holidays.sort(sortHolidays);
+
     })
     .then(() => {
       let today = new Date();
@@ -178,15 +184,15 @@ async function initialisation() {
       endingDateElt.max = maxDate;
       endingDateElt.min = minDate;
 
-      const evt = new Event("change");
-      startingDateElt.addEventListener("change", changeInterval);
-      endingDateElt.addEventListener("change", changeInterval);
-      startingDateElt.dispatchEvent(evt);
-
       // Jours fériés
       for (let year = parseInt(minDate.substring(0, 4)); year <= parseInt(maxDate.substring(0, 4)); year++) {
         computePublicHolidays(year);
       }
+
+      const evt = new Event("change");
+      startingDateElt.addEventListener("change", changeInterval);
+      endingDateElt.addEventListener("change", changeInterval);
+      startingDateElt.dispatchEvent(evt);
     });
 }
 
@@ -252,8 +258,6 @@ function resetCalendar() {
 }
 
 function selectTeam(event) {
-  let dayNames = ["D", "L", "M", "M", "J", "V", "S"];
-
   // Faire disparaître l'instruction de cliquer sur une équipe
   let instructions = document.querySelector("#team-detail p");
   instructions.classList.add("hidden");
@@ -319,12 +323,13 @@ function selectTeam(event) {
       tdElt.classList.add('holiday');
     }
     if (day.getWeekend()) {
-      tdElt.style.backgroundColor = "#CCCCCC";
+      tdElt.style.backgroundColor = "#EEEEEE";
     } else {
-      tdElt.style.backgroundColor = team.color;
+      tdElt.style.backgroundColor = team.color.getHex();
     }
     if (day.getPublicDay()) {
-      tdElt.style.backgroundColor = "#FFCCCC";
+      tdElt.style.backgroundColor = "#FF0000";
+      tdElt.title = day.getPublicDayName();
     }
     currentRaw.appendChild(tdElt);
 
@@ -342,7 +347,7 @@ function updateTeamsSection() {
   teams.forEach((team, index) => {
     let newRow = document.createElement("tr");
     newRow.id = `team${index}`;
-    newRow.style.backgroundColor = team.color;
+    newRow.style.backgroundColor = team.color.getHex();
     newRow.innerHTML = `
     <td>${team.name}</td>
       <td class="spinner">${team.workingDaysCount()}</td>
@@ -417,6 +422,7 @@ function updateTeamObjects(startingDate, endingDate) {
     for (let publicDay of publicDays) {
       if (currentDate.equal(publicDay)) {
         currentDate.setPublicDay(true);
+        currentDate.setPublicDayName(publicDay.getPublicDayName());
       }
     }
     if (currentDate.getDay() === 1 && !currentDate.holiday && !currentDate.equal(dateReference)) {

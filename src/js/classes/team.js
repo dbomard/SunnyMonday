@@ -1,4 +1,5 @@
 import "../dateUtils.js";
+import { Color } from "./color.js";
 
 export class Team {
   #name;
@@ -10,10 +11,10 @@ export class Team {
    *
    * @param {string} name
    * @param {Array} weeksPattern
-   * @param {string} color 
+   * @param {Color} color 
    * @param {Array.<date>} days 
    */
-  constructor(name, weeksPattern, color = "#cfcfcf") {
+  constructor(name, weeksPattern, color = new Color("#cfcfcf")) {
     this.#name = name;
     this.#pattern = weeksPattern;
     this.#color = color;
@@ -115,7 +116,7 @@ export class Team {
   }
 
   /**
-   * @returns {string}
+   * @returns {Color}
    */
   get color() {
     return this.#color;

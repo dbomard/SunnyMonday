@@ -16,7 +16,7 @@ export class Color {
     /**
      * @returns {string} Hex representation of the color
      */
-    getColor() {
+    getHex() {
         return "#" + this.#red.toString(16) + this.#green.toString(16) + this.#blue.toString(16);
     }
 }
