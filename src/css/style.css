@@ -6,6 +6,10 @@
     display: none;
 }
 
+#calendar td {
+    text-align: center;
+}
+
 .holiday {
     position: relative;
 }
