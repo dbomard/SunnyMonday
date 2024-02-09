@@ -199,6 +199,15 @@ async function initialisation() {
 function changeInterval(e) {
   let startingDateElt = document.querySelector("#startingDate");
   let endingDateElt = document.querySelector("#endingDate");
+
+  if (startingDateElt.value === "" || endingDateElt.value === "") {
+    e.currentTarget.classList.add("is-invalid");
+    e.preventDefault();
+    return;
+  }
+  e.currentTarget.classList.remove("is-invalid");
+
+
   let startingDate = new Date(startingDateElt.value);
   startingDate.setHours(0, 0, 0, 0);
   let endingDate = new Date(endingDateElt.value);
