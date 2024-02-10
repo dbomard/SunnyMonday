@@ -282,11 +282,31 @@ function selectTeam(event) {
   let instructions = document.querySelector("#team-detail p");
   instructions.classList.add("hidden");
 
+  let teamRow = event.currentTarget;
+  let teamCheckbox = teamRow.querySelector('input');
+  if (teamCheckbox.checked) {
+    event.preventDefault();
+    teamCheckbox.checked = false;
+    resetCalendar();
+    return;
+  }
+
+  // Raz de toutes les coches
+  for (let check of document.querySelectorAll('.teamCheckbox')) {
+    check.checked = false
+  }
+
+  // Cocher la ligne cliquée
+  teamCheckbox.checked = true;
+
   // Récupération de l'index de l'équipe
   let teamIndex = event.currentTarget.id.substring(4);
   let team = teams[teamIndex];
   console.log("Equipe cliquée: " + teamIndex);
+  drawCalendar(team);
+}
 
+function drawCalendar(team) {
   // RAZ zone du calendrier
   let calendar = document.querySelector("#calendar");
   calendar.innerHTML = "";
@@ -366,13 +386,22 @@ function selectTeam(event) {
 function updateTeamsSection() {
   // MAJ Affichage
   let table = document.querySelector("#table-teams");
+  //Sauvegarde de l'équipe cochée
+  let checkedId = undefined;
+  for (let row of table.querySelectorAll("tr")) {
+    if (row.querySelector('.teamCheckbox').checked) {
+      checkedId = row.id;
+    }
+  }
+
+  // RAZ zone calendrier
   table.innerHTML = "";
   teams.forEach((team, index) => {
     let newRow = document.createElement("tr");
     newRow.id = `team${index}`;
     newRow.style.backgroundColor = team.color.getHex();
     newRow.innerHTML = `
-      <td><input class="form-check-input" type="checkbox" value="" id="team${team.name}" /></td>
+      <td><input class="form-check-input teamCheckbox" type="checkbox" id="team${team.name}" disabled /></td>
       <td>${team.name}</td>
       <td class="spinner">${team.workingDaysCount()}</td>
       <td class="spinner">${team.workingDaysCount() * 7}</td>
@@ -383,6 +412,12 @@ function updateTeamsSection() {
     table.appendChild(newRow);
     newRow.addEventListener("click", selectTeam);
   });
+
+  // Restauration coche
+  if (checkedId !== undefined) {
+    const evt = new Event("click");
+    table.querySelector(`#${checkedId}`).dispatchEvent(evt);
+  }
 }
 
 /**
