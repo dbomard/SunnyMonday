@@ -22,7 +22,7 @@ const holidays = new Array();
 const currentHolidays = new Array();
 
 /**@type {Array.<Date>} publicDays */
-const publicDays = new Array();
+var publicDays = new Array();
 
 
 /**
@@ -60,6 +60,8 @@ function getEasterDate(year) {
  * Calcul les jours fériés
  */
 function computePublicHolidays(year) {
+  let saturdays = document.querySelector('#saturdays').checked;
+
   let day = new Date(`${year}-01-01`);
   day.publicDay = true;
   day.setPublicDayName("1er janvier");
@@ -69,6 +71,13 @@ function computePublicHolidays(year) {
   easter.publicDay = true;
   easter.setPublicDayName("Pâques");
   publicDays.push(easter);
+
+  if (saturdays === true) {
+    day = easter.subDays(1);
+    day.publicDay = true;
+    day.setPublicDayName("Samedi de Pâques");
+    publicDays.push(day);
+  }
 
   day = easter.addDays(1)
   day.publicDay = true;
@@ -89,6 +98,13 @@ function computePublicHolidays(year) {
   day.publicDay = true;
   day.setPublicDayName("Pentecôte");
   publicDays.push(day);
+
+  if (saturdays === true) {
+    day = easter.addDays(48);
+    day.publicDay = true;
+    day.setPublicDayName("Samedi de la Pentecôte");
+    publicDays.push(day);
+  }
 
   day = easter.addDays(50)
   day.publicDay = true;
@@ -193,7 +209,27 @@ async function initialisation() {
       startingDateElt.addEventListener("change", changeInterval);
       endingDateElt.addEventListener("change", changeInterval);
       startingDateElt.dispatchEvent(evt);
+
+      let saturdays = document.querySelector('#saturdays');
+      saturdays.addEventListener('change', checkSaturdays);
     });
+}
+
+function checkSaturdays() {
+  publicDays = [];
+  let startingDateElt = document.querySelector("#startingDate");
+
+  let minDate = holidays[0].startingDate.toISOString().substring(0, 10);
+  let maxDate = holidays
+    .slice(-1)[0]
+    .endingDate.toISOString()
+    .substring(0, 10);
+
+  for (let year = parseInt(minDate.substring(0, 4)); year <= parseInt(maxDate.substring(0, 4)); year++) {
+    computePublicHolidays(year);
+  }
+  const evt = new Event("change");
+  startingDateElt.dispatchEvent(evt);
 }
 
 function changeInterval(e) {

@@ -48,6 +48,7 @@ Date.prototype.subDays = function (daysCount) {
     this.getMonth(),
     this.getDate() - daysCount
   );
+  newDate.setHours(0, 0, 0, 0);
   return newDate;
 }
 
