@@ -212,6 +212,8 @@ async function initialisation() {
 
       let saturdays = document.querySelector('#saturdays');
       saturdays.addEventListener('change', checkSaturdays);
+
+      let dateReferenceRadio =  
     });
 }
 

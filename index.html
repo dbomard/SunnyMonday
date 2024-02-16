@@ -33,11 +33,19 @@
                             <input type="date" class="form-control" id="endingDate" />
                         </div>
                     </div>
-                    <div class="col-auto">
-                        <div class="input-group mb-3">
-                            <span for="dateReference" class="input-group-text">Date de référence pour la mise en place
-                                des rotations :</span>
-                            <input type="date" class="form-control" id="dateReference" value="2024-09-02" disabled />
+                    <div class="row mb-4">
+                        <div class="col-auto">
+                            <label class="form-label">Date de référence pour la mise en place des rotations : </label>
+                            <div class="form-check form-check-inline" id="dateReference">
+                                <input type="radio" name="initialDate" class="form-check-input"
+                                    id="dateReferenceSeptembre" checked />
+                                <label for="dateReferenceSeptembre" class="form-check-label">02/09/2024</label>
+                            </div>
+                            <div class="form-check form-check-inline" id="dateReference">
+                                <input type="radio" name="initialDate" class="form-check-input"
+                                    id="dateReferenceJanuary" />
+                                <label for="dateReferenceJanuary" class="form-check-label">01/01/2025</label>
+                            </div>
                         </div>
                     </div>
                 </div>
