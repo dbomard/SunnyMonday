@@ -89,6 +89,11 @@ function computePublicHolidays(year) {
   day.setPublicDayName("Fête du travail");
   publicDays.push(day);
 
+  day = new Date(`${year}-05-08`)
+  day.publicDay = true;
+  day.setPublicDayName("Victoire 1945");
+  publicDays.push(day);
+
   day = easter.addDays(39)
   day.publicDay = true;
   day.setPublicDayName("Ascension");
@@ -169,7 +174,7 @@ async function initialisation() {
   await getHolidays()
     .then((results) => {
       for (let holiday of results) {
-        if (!holiday.description.toLowerCase().includes("pont")) {
+        if (holiday.description === "Vacances d'Été") {
           let newHoliday = new Holiday(
             holiday.description,
             new Date(holiday.start_date),
@@ -224,13 +229,16 @@ async function initialisation() {
             dateReference = new Date('2024-09-02T00:00:00Z');
             break;
         }
+        const evt = new Event("change");
+        let startingDateElt = document.querySelector("#startingDate");
+        startingDateElt.dispatchEvent(evt);
+
       })
     });
 }
 
 function checkSaturdays() {
   publicDays = [];
-  let startingDateElt = document.querySelector("#startingDate");
 
   let minDate = holidays[0].startingDate.toISOString().substring(0, 10);
   let maxDate = holidays
@@ -242,6 +250,7 @@ function checkSaturdays() {
     computePublicHolidays(year);
   }
   const evt = new Event("change");
+  let startingDateElt = document.querySelector("#startingDate");
   startingDateElt.dispatchEvent(evt);
 }
 
