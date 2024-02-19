@@ -12,7 +12,7 @@ import "./colorUtils.js";
 const teams = new Array(5);
 
 /**@type {Date} dateReference - Date de référence pour le calcul des semaines */
-const dateReference = new Date("2024-09-02T00:00:00Z");
+var dateReference = new Date("2024-09-02T00:00:00Z");
 dateReference.setHours(0, 0, 0, 0);
 
 /**@type {Array.<Holiday>} holidays */
@@ -213,7 +213,18 @@ async function initialisation() {
       let saturdays = document.querySelector('#saturdays');
       saturdays.addEventListener('change', checkSaturdays);
 
-      let dateReferenceRadio =  
+      let dateReferenceRadio = document.querySelector('#chooseReferenceDate');
+      dateReferenceRadio.addEventListener('change', (e) => {
+        console.log(e.target.value);
+        switch (e.target.value) {
+          case "referenceJanuary":
+            dateReference = new Date('2025-01-06T00:00:00Z')
+            break;
+          case "referenceSeptembre":
+            dateReference = new Date('2024-09-02T00:00:00Z');
+            break;
+        }
+      })
     });
 }
 
