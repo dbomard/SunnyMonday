@@ -104,12 +104,13 @@ function computePublicHolidays(year) {
   day.setPublicDayName("Pentecôte");
   publicDays.push(day);
 
-  if (saturdays === true) {
+  // Le samedi de Pentecôte est posé sur les CA
+  /*if (saturdays === true) {
     day = easter.addDays(48);
     day.publicDay = true;
     day.setPublicDayName("Samedi de la Pentecôte");
     publicDays.push(day);
-  }
+  }*/
 
   day = easter.addDays(50)
   day.publicDay = true;
