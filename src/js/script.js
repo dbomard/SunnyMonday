@@ -195,11 +195,11 @@ async function initialisation() {
       startingDateElt.value = `${today.getFullYear()}-01-01`;
       endingDateElt.value = `${today.getFullYear()}-12-31`;
 
-      let minDate = holidays[0].startingDate.toISOString().substring(0, 10);
+      let minDate = holidays[0].startingDate.toISOString().substring(0, 3)+"-01-01";
       let maxDate = holidays
         .slice(-1)[0]
         .endingDate.toISOString()
-        .substring(0, 10);
+        .substring(0, 3)+ "-12-31";
 
       startingDateElt.max = maxDate;
       startingDateElt.min = minDate;
