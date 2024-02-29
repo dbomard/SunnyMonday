@@ -1,0 +1,123 @@
+{
+    "scenario": [
+        {
+            "name": "4 équipes",
+            "weeksTypes": [
+                {
+                    "name": "open",
+                    "days": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "name": "holidays",
+                    "days": [
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "name": "typeA",
+                    "days": [
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "name": "typeB",
+                    "days": [
+                        false,
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false
+                    ]
+                },
+                {
+                    "name": "typeC",
+                    "days": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        false
+                    ]
+                },
+                {
+                    "name": "typeD",
+                    "days": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        false
+                    ]
+                }
+            ],
+            "teams": [
+                {
+                    "name": "Verte",
+                    "color": "#B3ffB3",
+                    "weeks": [
+                        "typeA",
+                        "typeB",
+                        "typeC",
+                        "typeD"
+                    ]
+                },
+                {
+                    "name": "Rouge",
+                    "color": "#ffB3B3",
+                    "weeks": [
+                        "typeB",
+                        "typeC",
+                        "typeD",
+                        "typeA"
+                    ]
+                },
+                {
+                    "name": "Jaune",
+                    "color": "#ffffB3",
+                    "weeks": [
+                        "typeC",
+                        "typeD",
+                        "typeA",
+                        "typeB"
+                    ]
+                },
+                {
+                    "name": "Bleue",
+                    "color": "#B3ffff",
+                    "weeks": [
+                        "typeD",
+                        "typeA",
+                        "typeB",
+                        "typeC"
+                    ]
+                }
+            ]
+        }
+    ]
+}
