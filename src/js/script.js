@@ -145,31 +145,38 @@ function computePublicHolidays(year) {
 
 async function initialisation() {
   // Création des équipes
-  let color = new Color("#B3ffB3");
-  teams[0] = new Team(
-    "Verte",
-    [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD],
-    color
-  );
-  color = new Color("#ffB3B3");
-  teams[1] = new Team(
-    "Rouge",
-    [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA],
-    color
-  );
-  color = new Color("#ffffB3");
-  teams[2] = new Team(
-    "Jaune",
-    [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB],
-    color
-  );
-  color = new Color("#B3ffff");
-  teams[3] = new Team(
-    "Bleue",
-    [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC],
-    color
-  );
-  teams[4] = new Team("Mediathèque", [weekTypes.open]);
+  fetch('./src/js/config.json')
+    .then(response => {
+      return response.json;
+    })
+    .then(response => {
+      console.log(response);
+    })
+  // let color = new Color("#B3ffB3");
+  // teams[0] = new Team(
+  //   "Verte",
+  //   [weekTypes.typeA, weekTypes.typeB, weekTypes.typeC, weekTypes.typeD],
+  //   color
+  // );
+  // color = new Color("#ffB3B3");
+  // teams[1] = new Team(
+  //   "Rouge",
+  //   [weekTypes.typeB, weekTypes.typeC, weekTypes.typeD, weekTypes.typeA],
+  //   color
+  // );
+  // color = new Color("#ffffB3");
+  // teams[2] = new Team(
+  //   "Jaune",
+  //   [weekTypes.typeC, weekTypes.typeD, weekTypes.typeA, weekTypes.typeB],
+  //   color
+  // );
+  // color = new Color("#B3ffff");
+  // teams[3] = new Team(
+  //   "Bleue",
+  //   [weekTypes.typeD, weekTypes.typeA, weekTypes.typeB, weekTypes.typeC],
+  //   color
+  // );
+  // teams[4] = new Team("Mediathèque", [weekTypes.open]);
 
   // Création de la liste des vacances
   await getHolidays()
@@ -195,11 +202,11 @@ async function initialisation() {
       startingDateElt.value = `${today.getFullYear()}-01-01`;
       endingDateElt.value = `${today.getFullYear()}-12-31`;
 
-      let minDate = holidays[0].startingDate.toISOString().substring(0, 4)+"-01-01";
+      let minDate = holidays[0].startingDate.toISOString().substring(0, 4) + "-01-01";
       let maxDate = holidays
         .slice(-1)[0]
         .endingDate.toISOString()
-        .substring(0, 4)+ "-12-31";
+        .substring(0, 4) + "-12-31";
 
       startingDateElt.max = maxDate;
       startingDateElt.min = minDate;
